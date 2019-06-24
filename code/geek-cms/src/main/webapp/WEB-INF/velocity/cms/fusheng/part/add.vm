@@ -1,0 +1,85 @@
+#set($page_title="配件管理")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<form class="form-horizontal" id="partForm" role="form">
+	<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">配件管理<span style="font-size: 12px">>>
+	             #if($add == "add")
+	                	新增配件
+	            #else
+	                	编辑配件
+	            #end
+        	</span></h4>
+    </div>    
+    <div class="modal-body">
+        <fieldset>
+            <input type="hidden" id="pId" name="pId" value="$!{part.pId}">
+            <input type="hidden" id="fileIds" name="fileIds" value="$!{part.fileIds}">
+
+			<div class="form-group col-xs-12">
+				<label class="col-xs-4 control-label no-padding-right" for="aCode"><a class="red">*</a> 配件编号:</label>
+				<div class="col-xs-8">
+					<input type="text" id="pCode" name="pCode" value="$!{part.pCode}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入配件编号" />
+				</div>
+			</div>
+ 			<div class="form-group col-xs-12">
+				<label class="col-xs-4 control-label no-padding-right" for="pName"><a class="red">*</a> 配件名称:</label>
+				<div class="col-xs-8">
+					<input type="text" id="pName" name="pName" value="$!{part.pName}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入配件名称" />
+				</div>
+			</div> 
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="price"> 配件价格:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="pPrice" name="pPrice" value="$!{part.pPrice}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入配件价格" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="pPic">上传照片:</label>
+                 <div class="col-xs-8">
+                    <span id="picSpan" name="picSpan" class="col-xs-6"
+                          style="border: 1px solid silver;height: 34px;padding-top: 6px;">
+                    </span>
+                    <button type="button" id="pPicBtn" class="btn btn-white btn-info col-xs-2" name="pPicBtn">选择照片</button><span id="pPicMsg"></span>
+					<div id="picBar" name="picBar" class="col-xs-6"></div>                   
+					<div id="picContant" name="picContant"></div>
+                    <input type="hidden" id="pPic" name="pPic" value="$!{part.pPic}">
+                </div>               
+                
+                <!--<div class="col-xs-8">-->
+					<!--<p class="upload-file col-xs-8">-->
+						<!--<span class="file-content">#if($add=='add')请选择照片 #else $!{part.pPic} #end</span>-->
+                            <!--<span class="btn btn-white btn-default">-->
+                                <!--<input type="file" id="pPicFile" name="pPicFile">-->
+                            <!--<span id="pPic">选择照片</span>-->
+						<!--</span>-->
+                    <!--</p>-->
+                <!--</div>-->
+                <!--<div class="col-xs-12  text-center">-->
+                    <!--<p><span style="color: red" id="pPicTips"></span></p>-->
+                <!--</div>-->               
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="note">备注:</label>
+                <div class="col-xs-8">
+                <textarea id="note" name="note" class="col-xs-8 ui-autocomplete-input">$!{part.note}</textarea>
+                </div>
+            </div>            
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="submit" id="submit-btn" name="submit-btn">
+            保存
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-white btn-info " type="button" id="closeModal">
+            取消
+        </button>
+    </div>
+</form>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/part/add.js?_dc=$!{staticVersion}"></script>
+#parse("/cms/common/fileupload.vm")

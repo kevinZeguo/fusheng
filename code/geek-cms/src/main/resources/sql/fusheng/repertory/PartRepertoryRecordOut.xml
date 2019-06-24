@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.PartRepertoryRecordOutDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordOut">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="repertory_record_id" property="repertoryRecordId" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="contract_id" property="contractId" jdbcType="TINYINT"/>
+        <result column="send_type" property="sendType" jdbcType="INTEGER"/>
+        <result column="linkman" property="linkman" jdbcType="VARCHAR"/>
+        <result column="tel_sign" property="telSign" jdbcType="VARCHAR"/>
+        <result column="fax" property="fax" jdbcType="VARCHAR"/>
+        <result column="verifier" property="verifier" jdbcType="VARCHAR"/>
+        <result column="postcode" property="postcode" jdbcType="VARCHAR"/>
+        <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, repertory_record_id, customer_id, contract_id, send_type, linkman, tel_sign,
+    fax, verifier, postcode, receiver_address, creator, created, modifier, modified, 
+    deleted
+  </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="record_col"/>,
+        <include refid="out_col"/>,su.real_name operatorName ,DATE_FORMAT(rr.created,'%Y-%m-%d') createdStr,
+        tc.c_name customerName,con.a_code contractCode,av.attr_value storageName
+        from tb_part_repertory_record rr
+        left join tb_part_repertory_record_out ro on rr.id = ro.repertory_record_id and ro.deleted = 0
+        left join tb_customer tc on tc.c_id = ro.customer_id
+        left join tb_contract con on con.id = ro.contract_id
+        left join sys_user su on su.user_id = ro.creator
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rr.deleted = 0
+        and rr.repertory_type = 2
+        and rr.status = 1
+        and rr.id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from tb_part_repertory_record_out
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordOut">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_part_repertory_record_out ( repertory_record_id, customer_id,
+        contract_id, send_type, linkman,tel_sign, fax, verifier,
+        postcode, receiver_address, creator, sender ,
+        created, modifier, modified,
+        deleted)
+        values ( #{repertoryRecordId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},
+        #{contractId,jdbcType=TINYINT}, #{sendType,jdbcType=INTEGER}, #{linkman,jdbcType=VARCHAR},
+        #{telSign,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{verifier,jdbcType=VARCHAR},
+        #{postcode,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR}, #{creator,jdbcType=INTEGER},#{sender},
+        now(), #{modifier,jdbcType=INTEGER}, now(),0)
+    </insert>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordOut">
+    update tb_part_repertory_record_out
+    set
+      contract_id = #{contractId,jdbcType=TINYINT},
+      send_type = #{sendType,jdbcType=INTEGER},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      tel_sign = #{telSign,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      verifier = #{verifier,jdbcType=VARCHAR},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now()
+    where repertory_record_id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectOutRepertoryCountByPage" resultType="int" parameterType="RepertoryQueryParam">
+        select count(1)
+        from tb_part_repertory_record rr
+        left join tb_part_repertory_record_out ro on rr.id = ro.repertory_record_id and ro.deleted = 0
+        left join tb_customer tc on tc.c_id = ro.customer_id
+        left join tb_contract con on con.id = ro.contract_id
+        left join sys_user su on su.user_id = ro.creator
+        where rr.deleted = 0
+        and rr.status = 1
+        <if test="customerKey != null and customerKey != ''">
+            and (tc.c_code like #{customerKey} or tc.c_name like #{customerKey})
+        </if>
+        <if test="contractCode != null and contractCode != ''">
+            and con.a_code = #{contractCode}
+        </if>
+        <if test="outCode != null and outCode != ''">
+            and rr.code = #{outCode}
+        </if>
+        <if test="sender != null and sender != ''">
+            and ro.sender like #{sender}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[ and rr.created >= #{startDate}     ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ and rr.created <= #{endDate}     ]]>
+        </if>
+        and rr.repertory_type = 2
+    </select>
+
+
+    <sql id="record_col">
+        rr.id id,rr.code,  rr.storage_id storageId,rr.note, rr.repertory_type repertoryType, rr.status, rr.creator,
+        rr.created, rr.modifier, rr.modified,rr.deleted
+    </sql>
+
+    <sql id="out_col">
+       ro.repertory_record_id repertoryRecordId ,ro.customer_id customerId ,ro.contract_id contractId ,ro.sender sender,
+       ro.send_type sendType ,ro.linkman linkman ,ro.tel_sign telSign ,ro.fax fax ,ro.verifier verifier ,
+       ro.postcode postcode ,ro.receiver_address receiverAddress
+    </sql>
+
+    <select id="selectOutRepertoryListByPage" resultType="PartRepertoryRecordOut" parameterType="RepertoryQueryParam">
+        select<include refid="record_col"/>,
+        <include refid="out_col"/>,su.real_name operatorName ,DATE_FORMAT(rr.created,'%Y-%m-%d') createdStr,
+        tc.c_name customerName,con.a_code contractCode,av.attr_value storageName
+        from tb_part_repertory_record rr
+        left join tb_part_repertory_record_out ro on rr.id = ro.repertory_record_id and ro.deleted = 0
+        left join tb_customer tc on tc.c_id = ro.customer_id
+        left join tb_contract con on con.id = ro.contract_id
+        left join sys_user su on su.user_id = ro.creator
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rr.deleted = 0
+        and rr.repertory_type = 2
+        and rr.status = 1
+        <if test="customerKey != null and customerKey != ''">
+            and (tc.c_code like #{customerKey} or tc.c_name like #{customerKey})
+        </if>
+        <if test="contractCode != null and contractCode != ''">
+            and con.a_code = #{contractCode}
+        </if>
+        <if test="outCode != null and outCode != ''">
+            and rr.code = #{outCode}
+        </if>
+        <if test="sender != null and sender != ''">
+            and ro.sender like #{sender}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[ and rr.created >= #{startDate}     ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ and rr.created <= #{endDate}     ]]>
+        </if>
+        order by rr.id desc
+        limit #{start} , #{limit}
+    </select>
+
+</mapper>

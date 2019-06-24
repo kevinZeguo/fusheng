@@ -1,0 +1,14 @@
+svn地址：
+
+代码地址：svn://120.77.151.83/xjkp/fusheng/code/geek-cms
+文档地址：svn://120.77.151.83/xjkp/fusheng/doc
+
+svn 账号
+用户名/密码：
+fengxq/f123456   冯小强
+zhangyq/z123456  张永权
+
+
+数据库:
+120.77.151.83:3306/geek_cms
+root/xjkp123

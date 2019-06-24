@@ -1,0 +1,414 @@
+#set($page_title=" 巡检详情")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<link href="/plug-in/geek/print.css" rel="stylesheet" type="text/css" media="print"/>
+<script src="/plug-in/fusheng/server/polling/info.js?_dc=$!{staticVersion}"></script>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">运营服务<span style="font-size: 12px">>>
+                巡检详情
+        </span></h4>
+</div>
+<input type="hidden" id="id" name="id" value="$!{polling.id}"/>
+<input type="hidden" class="hidden" id="cNameI" name="cNameI" value="$!{polling.cId}"/>
+<input type="hidden" class="hidden" id="eNameI" name="eNameI" value="$!{polling.eId}"/>
+
+<div class="" id="polling-Info">
+    <div class="print-header col-xs-12" style="font-family:'微软雅黑', '幼圆','宋体';">
+        <div class="col-xs-3 align-center" style="margin-top: 20px;font-size: 8px">
+            <div class="print-logo ">
+                <img src="/images/logo.png" style="width: 150px">
+            </div>
+            <div class="print-culture ">
+                精益求精<br>
+                为用户提供优质，安全<br>
+                可靠的产品和满意的服务
+            </div>
+        </div>
+        <div class="col-xs-9 align-center" style="font-weight:bolder">
+            <div class="print-business">
+                <h1>北京精通复盛机械有限公司</h1>
+            </div>
+            <div class="print-title">
+                <h3>巡检单</h3>
+            </div>
+        </div>
+    </div>
+    <div class="print-body col-xs-12">
+        <table style="border: 1px solid #000000;width: 95%;font-size: 16px;margin-left: 20px;margin-right: 20px;margin-top: 10px;table-layout：fixed">
+            <tr style="border: 1px solid #000000;">
+                <td style="width: 25%;border: 1px solid #000000;">
+                    巡检单号
+                </td>
+                <td style="width: 25%;border: 1px solid #000000;" colspan="3">
+                    $!{polling.code}
+                </td>
+
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="width: 25%;border: 1px solid #000000;">
+                    客户代码
+                </td>
+                <td style="width: 25%;border: 1px solid #000000;">
+                    $!{polling.cCode}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    客户名称
+                </td>
+                <td style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{polling.cName}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    客户电话
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;">
+                    $!{polling.phone}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    客户地址
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{polling.address}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    联系人
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;">
+                    $!{polling.contact}
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    主机号码
+                </td>
+                <td>
+                    #if($!{polling.hostNum} != "")
+                        $!{polling.hostNum}
+                    #elseif ($!{polling.oldHostNum} != "")
+                        $!{polling.oldHostNum}
+                    #else
+                        --
+                    #end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    设备型号
+                </td>
+                <td>
+                    $!{polling.eModel}
+                </td>
+
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    电机厂牌
+                </td>
+                <td>
+                    $!{polling.motorBrand}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    制造号码
+                </td>
+                <td>
+                    $!{polling.makeNum}
+                </td>
+
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    环境温度
+                </td>
+                <td>
+                    $!{polling.envTemperature}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    排气温度
+                </td>
+                <td>
+                    $!{polling.exhaustTemperature}
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    冷却水压
+                </td>
+                <td>
+                    $!{polling.MPa}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    运转时数
+                </td>
+                <td>
+                    $!{polling.hoursToStream}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    运转气压
+                </td>
+                <td>
+                    $!{polling.operatingPressure}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    运转油压
+                </td>
+                <td>
+                    $!{polling.operatingOilPressure}
+                </td>
+            </tr>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    电压(RS/RT/ST)
+                </td>
+                <td>
+                    $!{polling.RSPressure}/$!{polling.RTPressure}/$!{polling.STPressure}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    电流(R线/S线/T线)
+                </td>
+                <td>
+                    $!{polling.RElectric}/ $!{polling.SElectric}/ $!{polling.TElectric}
+                </td>
+            </tr>
+        </table>
+        <table style="width: 95%;font-size: 16px;margin-left: 20px;margin-right: 20px;margin-bottom: 20px;">
+        ##            <tr >
+        ##                <td colspan="4" style="border-left: 1px solid #000000;border-right: 1px solid #000000;">
+        ##                    以下是巡回服务内容
+        ##                </td>
+        ##            </tr>
+            <tr style="border-left: 1px solid #000000;border-right: 1px solid #000000;">
+                <td style="border-left: 1px solid #000000;border-right: 1px solid #000000;" width="35%">
+                    电控盘及电视机大线螺丝是否紧固
+                </td>
+                <td style="border-left: 1px solid #000000;border-right: 1px solid #000000;" width="15%">
+                    #if($!{polling.isFastening} == 1) 是 #else 否#end
+                </td>
+                <td style="border-left: 1px solid #000000;border-right: 1px solid #000000;" width="35%">
+                    接触器接线柱颜色、动作是否正常
+                </td>
+                <td style="border-left: 1px solid #000000;border-right: 1px solid #000000;" width="15%">
+                    #if($!{polling.isTerminalNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    油气桶在停一段时间后是否经常放水
+                </td>
+                <td>
+                    #if($!{polling.isOilBarrelsNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    配件来源是否正厂
+                </td>
+                <td>
+                    #if($!{polling.isFactory} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    热控阀动作是否正常
+                </td>
+                <td>
+                    #if($!{polling.isThermalNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    冷却水温是否正常
+                </td>
+                <td>
+                    #if($!{polling.isTemperatureNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    电机、主机是否正常
+                </td>
+                <td>
+                    #if($!{polling.isMotorNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    散热器是否定期修理
+                </td>
+                <td>
+                    #if($!{polling.isRadiatorNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    各管路是否漏油现象
+                </td>
+                <td>
+                    #if($!{polling.isPipelinesNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    压力维持阀是否开启正常
+                </td>
+                <td>
+                    #if($!{polling.isMaintenanceNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    油品颜色是否正常
+                </td>
+                <td>
+                    #if($!{polling.isOilColorNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    皮带松紧度是否正常
+                </td>
+                <td>
+                    #if($!{polling.isTightnessNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    三滤压差开关是否正常
+                </td>
+                <td>
+                    #if($!{polling.isThreeFilterNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    电机皮带轮是否与主机
+                </td>
+                <td>
+                    #if($!{polling.isPulleyNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    机柜各过滤网是否定期清理
+                </td>
+                <td>
+                    #if($!{polling.isCabinetNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    管路过滤器是否正常排水
+                </td>
+                <td>
+                    #if($!{polling.isThermalNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    机器各门是否关闭运行
+                </td>
+                <td>
+                    #if($!{polling.isDoorsNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    自动排污阀是否经常排污
+                </td>
+                <td>
+                    #if($!{polling.isAutomaticNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    使用环境是否良好
+                </td>
+                <td>
+                    #if($!{polling.isUseEnvNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    容调点是否合适
+                </td>
+                <td>
+                    #if($!{polling.isVolumeNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    机器是否定期保养
+                </td>
+                <td>
+                    #if($!{polling.isMRegularlyNormal} == 1) 是 #else 否#end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    电机是否定期检查、保养、加油
+                </td>
+                <td>
+                    #if($!{polling.isMotorRegularlyNormal} == 1) 是 #else 否#end
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务人员建议
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;">
+                    $!{polling.engineerSuggest}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    客户意见
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{polling.feedback}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务态度是否良好
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;">
+                    #if($!{polling.attitude} == 1) 满意 #else 不满意#end
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务工程师
+                </td>
+                <td>
+                    $!{polling.serviceEngineerName}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    服务日期
+                </td>
+                <td>
+                    $!{polling.serviceDate}
+                </td>
+            </tr>
+
+        </table>
+        <br>
+        <br>
+        <div style="row">
+            #if($polling.attachmentList)
+                <h5>附件：</h5>
+                #foreach($url in $polling.attachmentList)
+                    <div class="row" style="margin-left: 20px">
+                        <img src="$!{url}" style="width: 95%">
+                    </div>
+                #end
+            #end
+        </div>
+    </div>
+</div>
+<div class="modal-footer col-xs-12">
+    <button class="btn btn-sm btn-primary" type="button" id="print-btn" name="print-btn">
+        打印
+    </button>
+    &nbsp; &nbsp; &nbsp;
+    <button class="btn btn-white btn-info " type="button" id="closePollingInfoModal">
+        关闭
+    </button>
+</div>
+
+#define($javascriptBlock)
+
+#end

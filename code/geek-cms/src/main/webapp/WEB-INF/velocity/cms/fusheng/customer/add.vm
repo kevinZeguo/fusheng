@@ -1,0 +1,114 @@
+#set($page_title=" 客户管理")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<script src="/plug-in/fusheng/customer/add.js?_dc=$!{staticVersion}"></script>
+
+<form class="form-horizontal" id="customerForm" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">客户管理<span style="font-size: 12px">>>编辑客户信息</span></h4>
+    </div>
+    <div class="modal-body">
+        <fieldset>
+            <input type="hidden" id="cId" name="cId" value="$!{customer.cId}">
+
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="cName"><span class="red">*</span>
+                    客户名称:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="cName" name="cName" value="$!{customer.cName}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入客户名称"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="address"> 详细地址:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="address" name="address" value="$!{customer.address}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入详细地址"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="contact"> 联系人:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="contact" name="contact" value="$!{customer.contact}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入联系人"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="phone"> 联系电话:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="phone" name="phone" value="$!{customer.phone}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入联系电话"/>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="payAcct"> 付款账号:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="payAcct" name="payAcct" value="$!{customer.payAcct}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入付款账号"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="taxNum"> 税号:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="taxNum" name="taxNum" value="$!{customer.taxNum}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入税号"/>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="serviceEngineer"> <span class="red">*</span>服务工程师:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="serviceEngineer" value="$!{customer.serviceEngineer}" name="serviceEngineer"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请选择服务工程师"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="fax">传真:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="fax" name="fax" value="$!{customer.fax}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入传真"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="payAcct">邮编:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="postCode" name="postCode" value="$!{customer.postCode}"
+                           class="col-xs-8 ui-autocomplete-input"
+                           placeholder="请输入邮编"/>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="submit" id="submit-btn" name="submit-btn">
+            保存
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-white btn-info " type="button" id="closeModal">
+            取消
+        </button>
+    </div>
+
+</form>
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.device.TbEquPartDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.device.TbEquPart">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="p_id" property="pId" jdbcType="INTEGER"/>
+        <result column="e_id" property="eId" jdbcType="INTEGER"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id , p_id , e_id, creator, created, modifier, modified, deleted
+    </sql>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.device.TbEquPart">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_equ_part (e_id, p_id, creator,created, modifier, modified,deleted,note)
+        values (#{eId,jdbcType=INTEGER}, #{pId,jdbcType=INTEGER}, #{creator,jdbcType=INTEGER},
+        now(), #{modifier,jdbcType=INTEGER}, now(),0,#{note,jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteById">
+        update tb_equ_part set deleted  = 1 , modifier = #{modifier} , modified = now() where id = #{id}
+    </delete>
+
+    <select id="selectPartCountByPage" resultType="int" parameterType="DeviceQueryParam">
+        select count(1) from tb_equ_part a
+        left join tb_equipment b on a.e_id = b.e_id
+        left join tb_part c on c.p_id = a.p_id
+        where a.deleted = 0
+        and b.deleted = 0
+        and c.deleted = 0
+        and b.e_id = #{eId}
+        <if test="keyword != null and keyword != ''">
+            and (c.p_code like #{keyword} or c.p_name like #{keyword})
+        </if>
+    </select>
+
+    <select id="selectPartListByPage" resultType="TbEquPart" parameterType="DeviceQueryParam">
+        select c.p_id pId, c.p_code pCode, c.p_name pName, c.p_price pPrice, c.note note, c.file_ids fileIds,u.real_name creatorName,
+        a.created created , a.creator creator,a.modifier modifier,a.modified modified
+        from tb_equ_part a
+        left join tb_equipment b on a.e_id = b.e_id
+        left join tb_part c on c.p_id = a.p_id
+        left join sys_user u on u.user_id = a.creator
+        where a.deleted = 0
+        and b.deleted = 0
+        and c.deleted = 0
+        and b.e_id = #{eId}
+        <if test="keyword != null and keyword != ''">
+            and (c.p_code like #{keyword} or c.p_name like #{keyword})
+        </if>
+        order by a.id desc
+        limit #{start} ,#{limit}
+    </select>
+
+    <delete id="deletePart">
+        update tb_equ_part set deleted  = 1 , modifier = #{modifier}, modified = now() where p_id = #{pId} and e_id = #{eId} and deleted = 0
+    </delete>
+
+
+</mapper>

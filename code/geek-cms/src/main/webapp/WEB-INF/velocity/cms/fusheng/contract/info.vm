@@ -1,0 +1,187 @@
+#set($page_title=" 合同详情")
+#set($selected_menu_id='menu_task_center_index')
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="/contract/index.html">合同管理</a>
+            </li>
+            <li class="active">合同详情</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+        <form class="form-horizontal form-inline" id="data-form">
+            <input type="hidden" id="id" name="id" value="$!{contract.id}"/>
+            <input type="hidden" id="fileIds" name="fileIds" value="$!{contract.fileIds}"/>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoCName">$!{contract.cName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 合同编号(甲方):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoACode">$!{contract.aCode}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 合同编号(乙方):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoBCode">$!{contract.bCode}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 价格:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoPrice">$!{contract.price}</span>
+                </div>
+                </label>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 是否已回款:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoIsCashBack">
+                        #if($!{contract.isCashBack}==1)
+                            是
+                        #else
+                            否
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label">回款金额:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoCashBackPrice">
+                        #if($!{contract.isCashBack}==1)
+                            $!{contract.cashBackPrice}
+                        #else
+                            --
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 回款日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoCashBackDate">
+                        #if($!{contract.isCashBack}==1)
+                            $!{contract.cashBackDateFormat}
+                        #else
+                            --
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 是否已发货:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoIsSendGoods">
+                        #if($!{contract.isSendGoods}==1)
+                            是
+                        #else
+                            否
+                        #end
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 发货日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoSendGoodsDate">
+                        #if($!{contract.isSendGoods}==1)
+                            $!{contract.sendGoodsDateFormat}
+                        #else
+                            --
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 是否已开发票:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="infoIsOpenInvoice">
+                        #if($!{contract.isOpenInvoice} == 1)
+                            是
+                        #else
+                            否
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 开票日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="openInvoieDate">
+                        #if($!{contract.isOpenInvoice} == 1)
+                            $!{contract.openInvoiceDateFormat}
+                        #else
+                            --
+                        #end
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 备注:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="postCode">$!{contract.note}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 合同文件:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="contractFileId">
+					</span>
+                </div>
+            </div>
+        </form>
+    ##        设备及配件记录
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/contract/info.js?_dc=$!{staticVersion}"></script>
+#end

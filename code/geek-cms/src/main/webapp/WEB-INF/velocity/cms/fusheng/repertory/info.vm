@@ -1,0 +1,82 @@
+#set($page_title=" 库存详情")
+#set($selected_menu_id='menu_task_center_index')
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="/repertory/index.html">库存管理</a>
+            </li>
+            <li class="active">库存详情</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+        <form class="form-horizontal form-inline" id="data-form">
+            <input type="hidden" id="id" name="id" value="$!{repertory.id}"/>
+            <input type="hidden" id="storageId" name="storageId" value="$!{repertory.storageId}"/>
+            <input type="hidden" id="pId" name="pId" value="$!{repertory.pId}"/>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 配件编号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cCode">$!{repertory.pCode}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 配件名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cName">$!{repertory.pName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 仓库名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="address">$!{repertory.storageName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 库存量:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="contact">$!{repertory.stockNum}</span>
+                </div>
+            </div>
+        </form>
+    ##        设备及配件记录
+        <div class="row col-xs-12" style="margin-top: 10px">
+            <div class="tabbable">
+                <div class="tab-content" style="width: 104% !important;margin-top: 35px;">
+                    <div style="margin-left: 10px;margin-bottom: 5px">
+                    </div>
+                    <div class="col-xl-12">
+                        <table id="part-grid-table"></table>
+                        <div id="part-grid-pager"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/fusheng/repertory/info.js?_dc=$!{staticVersion}"></script>
+#end

@@ -1,0 +1,170 @@
+#set($page_title=" 客户详情")
+#set($selected_menu_id='menu_task_center_index')
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="/customer/index.html">客户管理</a>
+            </li>
+            <li class="active">客户详情</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+        <form class="form-horizontal form-inline" id="data-form">
+            <input type="hidden" id="cId" name="cId" value="$!{customer.cId}"/>
+            <input type="hidden" class="hidden" id="cNameQ" name="cNameQ" value="$!{customer.cId}"/>
+            <input type="hidden" class="hidden" id="eModelQ" name="eModelQ" value=""/>
+            <input type="hidden" class="hidden" id="makeNumQ" name="makeNumQ" value=""/>
+            <input type="hidden" class="hidden" id="hostNumQ" name="hostNumQ" value=""/>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户编码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cCode">$!{customer.cCode}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cName">$!{customer.cName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 详细地址:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="address">$!{customer.address}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 联系人:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="contact">$!{customer.contact}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 联系电话:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="phone">$!{customer.phone}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 付款账号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="payAcct">$!{customer.payAcct}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 税号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="taxNum">$!{customer.taxNum}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 服务工程师:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="serviceEngineerName">$!{customer.serviceEngineerName}</span>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 传真:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="fax">$!{customer.fax}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 邮政编码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="postCode">$!{customer.postCode}</span>
+                </div>
+            </div>
+        </form>
+    ##        设备及配件记录
+        <div class="row col-xs-12" style="margin-top: 10px">
+            <div class="tabbable">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active toggle-component">
+                        <a data-toggle="tab" href="#equipmentDiv" id="toggle-equipment">
+                            <i class="green ace-icon fa fa-home bigger-120"></i>
+                            设备信息
+                        </a>
+                    </li>
+                    <li class="toggle-component">
+                        <a data-toggle="tab" href="#partsDiv" id="toggle-parts">
+                            配件更换记录
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" style="width: 104% !important;margin-top: 35px;">
+                    <div id="equipmentDiv" class="tab-pane fade in active">
+                        <div style="margin-left: 10px;margin-bottom: 5px">
+                            <input type="hidden" id="cNameQ" class="hidden" name="cNameQ" value="$!{customer.cCode}"
+                                   class="col-xs-12">
+                            <button type="button" class="btn btn-success button btn-sm" id="addDevice"
+                                    style="height: 32px">
+                                <i class="icon-plus"></i>新增
+                            </button>
+                            <button type="button" class="btn btn-success button btn-sm" id="addDeviceBatch"
+                                    style="height: 32px">
+                                <i class="icon-plus"></i>批量导入
+                            </button>
+                        </div>
+                        <div class="col-xl-12">
+                            <table id="device-grid-table"></table>
+                            <div id="device-grid-pager"></div>
+                        </div>
+                    </div>
+
+                    <div id="partsDiv" class="tab-pane fade">
+                        <div class="col-xl-12">
+                            <table id="parts-grid-table"></table>
+                            <div id="parts-grid-pager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/info.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/list.js?_dc=$!{staticVersion}"></script>
+#end
+
+#parse("/cms/fusheng/device/addModal.vm")

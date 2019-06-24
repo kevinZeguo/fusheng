@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.PartRepertoryRecordDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="storage_id" property="storageId" jdbcType="VARCHAR"/>
+        <result column="repertory_type" property="repertoryType" jdbcType="TINYINT"/>
+        <result column="record_date" property="recordDate" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id,code,  storage_id,note, repertory_type, status, creator, created, modifier, modified,record_date,
+    deleted
+  </sql>
+
+
+    <select id="selectById" resultType="PartRepertoryRecord" parameterType="java.lang.Integer">
+        select
+        <include refid="record_col"/>,av.attr_value storageName
+        from tb_part_repertory_record rr
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rr.id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from tb_part_repertory_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecord">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_part_repertory_record (code,record_date, storage_id,repertory_type, status,note, creator,created,
+        modifier, modified,
+        deleted)
+        values ( #{code},#{recordDate}, #{storageId,jdbcType=INTEGER},
+        #{repertoryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT},#{note}, #{creator,jdbcType=INTEGER},
+        now(), #{modifier,jdbcType=INTEGER},now(),0)
+    </insert>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecord">
+    update tb_part_repertory_record
+       set storage_id = #{storageId,jdbcType=INTEGER},
+       record_date = #{recordDate},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now(),
+      note  = #{note}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateStatus" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecord">
+        update tb_part_repertory_record
+        set status = #{status,jdbcType=TINYINT},
+        modifier = #{modifier,jdbcType=INTEGER},
+        modified = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryRecordCountByPage" resultType="int" parameterType="RepertoryQueryParam">
+        select
+        count(distinct rr.id)
+        from tb_part_repertory_record rr
+        left join tb_part_repertory_record_bill rb on rb.repertory_record_id = rr.id
+        left join sys_user su on su.user_id = rr.creator
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rr.deleted = 0
+        and av.deleted= 0
+        and rr.status = 1
+        <if test="repertoryType != null and repertoryType != ''">
+            and rr.repertory_type = #{repertoryType}
+        </if>
+        <if test="pId != null and pId != ''">
+            and rb.p_id = #{pId}
+        </if>
+        <if test="partKey != null and partKey != ''">
+            and (rb.p_code like #{partKey} or rb.p_name like #{partKey})
+        </if>
+        <if test="storageId != null and storageId != ''">
+            and rr.storage_id = #{storageId}
+        </if>
+        <if test="repertoryCode != null and repertoryCode != ''">
+            and rr.code like #{repertoryCode}
+        </if>
+        <if test="inDate != null and inDate != ''">
+            and rr.record_date = #{inDate}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[ and rr.record_date >= #{startDate}     ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ and rr.record_date <= #{endDate}     ]]>
+        </if>
+    </select>
+
+    <sql id="record_col">
+     rr.id,rr.code,  rr.storage_id storageId,rr.note, rr.repertory_type repertoryType, rr.status, rr.creator,
+     rr.created, rr.modifier, rr.modified,rr.deleted,rr.record_date recordDate
+    </sql>
+
+    <select id="queryRecordListByPage" resultType="PartRepertoryRecord" parameterType="RepertoryQueryParam">
+        select DISTINCT
+        <include refid="record_col"/>
+        ,su.real_name creatorName ,DATE_FORMAT(rr.created,'%Y-%m-%d') createdStr,av.attr_value storageName
+        from tb_part_repertory_record rr
+        left join tb_part_repertory_record_bill rb on rb.repertory_record_id = rr.id
+        left join sys_user su on su.user_id = rr.creator
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rr.deleted = 0
+        and av.deleted= 0
+        and rr.status = 1
+        <if test="repertoryType != null and repertoryType != ''">
+            and rr.repertory_type = #{repertoryType}
+        </if>
+        <if test="pId != null and pId != ''">
+            and rb.p_id = #{pId}
+        </if>
+        <if test="partKey != null and partKey != ''">
+            and (rb.p_code like #{partKey} or rb.p_name like #{partKey})
+        </if>
+        <if test="storageId != null and storageId != ''">
+            and rr.storage_id = #{storageId}
+        </if>
+        <if test="repertoryCode != null and repertoryCode != ''">
+            and rr.code like #{repertoryCode}
+        </if>
+        <if test="inDate != null and inDate != ''">
+            and rr.record_date = #{inDate}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[ and rr.record_date >= #{startDate}     ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ and rr.record_date <= #{endDate}     ]]>
+        </if>
+        order by rr.id desc
+        limit #{start} , #{limit}
+    </select>
+
+</mapper>

@@ -1,0 +1,115 @@
+#set($page_title="出库管理")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">出入库管理</a>
+            </li>
+            <li class="active">出库管理</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="seach-bar">
+            <div class="row">
+
+                <div class="col-xs-4 search-condition">
+
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">客户关键字</span>
+                        <input type="text" id="customerKey" name="customerKey" placeholder="输入客户编码/客户名称"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">出库单号</span>
+                        <input type="text" id="outCode" name="outCode" placeholder="输入出库单号"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">发货人</span>
+                        <input type="text" id="sender" name="sender" placeholder="输入发货人"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">出库开始时间</span>
+                        <input type="text" id="outStartDateQ" name="outStartDateQ" placeholder="请输出库开始时间"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">出库结束时间</span>
+                        <input type="text" id="outEndDateQ" name="outEndDateQ" placeholder="请输出库结束时间"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">合同编号</span>
+                        <input type="text" id="contractCode" name="contractCode" placeholder="合同编号"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <button class="btn btn-primary btn-search btn-sm" type="button" id="queryBtn">
+                        <i class="icon-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-success button btn-sm" id="inBtn" style="height: 32px">
+                        <i class="icon-plus"></i>出库
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-xs-12 tab-border">
+            <table id="out-grid-table"></table>
+            <div id="out-grid-pager"></div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/fusheng/repertory/out/list.js?_dc=$!{staticVersion}"></script>
+#end
+
+
+<!--addModal-->
+<div class="modal fade cms-modal" id="addModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content rep-out-body">
+    </div>
+</div>
+
+
+<!--addModal-->
+<div class="modal fade cms-modal" id="infoModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content rep-out-info-body">
+    </div>
+</div>

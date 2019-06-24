@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.customer.TbCustomerDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.customer.TbCustomer">
+        <id column="c_id" property="cId" jdbcType="INTEGER"/>
+        <result column="c_code" property="cCode" jdbcType="VARCHAR"/>
+        <result column="c_name" property="cName" jdbcType="VARCHAR"/>
+        <result column="contact" property="contact" jdbcType="VARCHAR"/>
+        <result column="pay_acct" property="payAcct" jdbcType="VARCHAR"/>
+        <result column="service_engineer" property="serviceEngineer" jdbcType="VARCHAR"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="tax_num" property="taxNum" jdbcType="VARCHAR"/>
+        <result column="fax" property="fax" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    c_id, c_code, c_name, contact, pay_acct, service_engineer, post_code, address, phone,
+    tax_num, fax, creator, created, modifier, modified, deleted
+  </sql>
+    <select id="selectById" resultType="TbCustomer" parameterType="java.lang.Integer">
+        select
+        <include refid="customer_col"/>
+        , u.real_name serviceEngineerName
+        from tb_customer c
+        left join sys_user u on c.service_engineer = u.user_id and u.deleted = 0
+        where c_id = #{cId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    update tb_customer set deleted = 1 ,modifier = #{userId} , modified = now() where c_id = #{cId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.customer.TbCustomer">
+        <selectKey keyProperty="cId" resultType="Integer">
+            SELECT @@IDENTITY AS cId
+        </selectKey>
+        insert into tb_customer ( c_code, c_name,
+        contact, pay_acct, service_engineer,
+        post_code, address, phone,
+        tax_num, fax, creator,
+        created, modifier, modified,
+        deleted)
+        values (#{cCode,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR},
+        #{contact,jdbcType=VARCHAR}, #{payAcct,jdbcType=VARCHAR}, #{serviceEngineer,jdbcType=VARCHAR},
+        #{postCode,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{taxNum,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{creator,jdbcType=INTEGER},
+        now(), #{modifier,jdbcType=INTEGER}, now(),0)
+    </insert>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.customer.TbCustomer">
+    update tb_customer
+    set c_code = #{cCode,jdbcType=VARCHAR},
+      c_name = #{cName,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      pay_acct = #{payAcct,jdbcType=VARCHAR},
+      service_engineer = #{serviceEngineer,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      tax_num = #{taxNum,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now()
+    where c_id = #{cId,jdbcType=INTEGER}
+  </update>
+
+    <sql id="customer_col">
+      c.c_id cId, c.c_code cCode,c.c_name cName,c.contact  contact,c.pay_acct payAcct,c.service_engineer serviceEngineer,
+      c.post_code postCode,c.address address,c.phone phone, c.tax_num taxNum, c.fax fax, c.creator creator,
+      c.created created, c.modifier modifier,c.modified modified,c.deleted deleted,c.c_id cId
+    </sql>
+
+    <select id="selectCustomerCountByPage" resultType="int" parameterType="CustomerQueryParam">
+        select count(1) from tb_customer c where c.deleted = 0
+        <if test="cName != null and cName != ''">
+            and c.c_name like #{cName} or c.c_code like #{cName}
+        </if>
+        <if test="contact != null and contact != ''">
+            and (c.contact like #{contact} or c.phone like #{contact} )
+        </if>
+        <if test="address != null and address != ''">
+            and c.address like #{address}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer != ''">
+            and service_engineer = #{serviceEngineer}
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and (c_name like #{keyword} or c_code like #{keyword})
+        </if>
+    </select>
+
+    <select id="selectCustomerListByPage" resultType="TbCustomer" parameterType="CustomerQueryParam">
+        select
+        <include refid="customer_col"/>,
+        count(e.e_id) equipmentCount,
+        u.real_name serviceEngineerName,
+        DATE_FORMAT(c.created,'%Y-%m-%d') createdStr
+        from tb_customer c
+        left join tb_equipment e on e.customer_id = c.c_id and e.deleted = 0
+        left join sys_user u on u.user_id = c.service_engineer
+        where c.deleted = 0
+        <if test="cName != null and cName != ''">
+            and c.c_name like #{cName} or c.c_code like #{cName}
+        </if>
+        <if test="contact != null and contact != ''">
+            and (c.contact like #{contact} or c.phone like #{contact} )
+        </if>
+        <if test="address != null and address != ''">
+            and c.address like #{address}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer != ''">
+            and service_engineer = #{serviceEngineer}
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and (c_name like #{keyword} or c_code like #{keyword})
+        </if>
+        group by c.c_id
+        order by c.c_id desc
+        limit #{start} ,#{limit}
+    </select>
+
+    <select id="selectByCName" resultType="TbCustomer" parameterType="String">
+        select
+        <include refid="customer_col"/>
+        from tb_customer c
+        where c.deleted = 0
+        and c.c_name = #{cName}
+    </select>
+
+</mapper>

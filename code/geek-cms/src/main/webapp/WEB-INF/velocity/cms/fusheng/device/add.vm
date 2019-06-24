@@ -1,0 +1,201 @@
+#set($page_title="设备管理")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<form class="form-horizontal" id="deviceForm" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">设备管理<span style="font-size: 12px">>>
+            #if($add == "add")
+                新增设备
+            #else
+                编辑设备
+            #end
+
+        </span></h4>
+    </div>
+    <div class="modal-body">
+        <fieldset>
+            <input type="hidden" id="eId" name="eId" value="$!{tbEquipment.eId}">
+            <input type="hidden" id="fileIds" name="fileIds" value="$!{tbEquipment.fileIds}">
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="customerId"><span class="red">*</span> 客户名称:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="customerId" name="customerId"
+                           class="col-xs-11 ui-autocomplete-input" value="$!{customerId}" #if($customerId) disabled #end
+                           placeholder="请选择客户"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="eModel"> <span class="red">*</span>
+                    设备机型:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="eModel" name="eModel" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.eModel}"
+                           placeholder="请输入设备机型"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="makeNum"><span class="red">*</span>
+                    制造号码:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="makeNum" name="makeNum" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.makeNum}"
+                           placeholder="请输入制造号码"/>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="hostNum"><span class="red">*</span>
+                    现主机号码:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="hostNum" name="hostNum" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.hostNum}"
+                           placeholder="请输入现主机号码"/>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="oldHostNum"> 原主机号码:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="oldHostNum" name="oldHostNum" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.oldHostNum}"
+                           placeholder="请输入原主机号码"/>
+                </div>
+            </div>
+
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="makeDate"> 制造日期:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="makeDate" name="makeDate" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.makeDate}"
+                           placeholder="请输入制造日期"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="motorBrand">
+                    电机厂牌:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="motorBrand" name="motorBrand" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.motorBrand}"
+                           placeholder="请输入电机厂牌"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="elecPanModel">
+                    电控盘型号:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="elecPanModel" name="elecPanModel" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.elecPanModel}"
+                           placeholder="请输入电控盘型号"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="motorBrand">
+                    电机出厂编号:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="machineryNumber" name="machineryNumber"
+                           class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.machineryNumber}"
+                           placeholder="请输入电机出厂编号"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="motorModel">
+                    电机型号:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" id="motorModel" name="motorModel" class="col-xs-11 ui-autocomplete-input"
+                           value="$!{tbEquipment.motorModel}"
+                           placeholder="请输入电机型号"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="motorMakeDate">
+                    电机制造日期:</label>
+
+                <div class="col-xs-8">
+                    <input type="text" class="col-xs-11 ui-autocomplete-input" placeholder="请选择电机制造日期"
+                           id="motorMakeDate"
+                           name="motorMakeDate" value="$!{tbEquipment.formatDate}"/>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-4 control-label no-padding-right" for="regularCheck">是否定期巡检:</label>
+
+                <div class="col-xs-8">
+                    <select id="regularCheck" name="regularCheck" class="col-xs-11"
+                            value="$!{tbEquipment.regularCheck}">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6" id="checkMonthsDiv" style="display: none;">
+                <label class="col-xs-4 control-label no-padding-right" for="checkMonths">巡检周期:</label>
+
+                <div class="col-xs-8">
+                    <select id="checkMonths" name="checkMonths" class="col-xs-11" value="$!{tbEquipment.checkMonths}">
+                        <option value="1">1个月</option>
+                        <option value="2">2个月</option>
+                        <option value="3">3个月</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group col-xs-12">
+                <label class="col-xs-2 control-label no-padding-right" for="ePic"> 照片:</label>
+
+                <div class="col-xs-10">
+                    <span id="picSpan" name="picSpan" class="col-xs-10"
+                          aria-placeholder="请选择照片" style="border: 1px solid silver;height: 34px;padding-top: 6px;">
+                    </span>
+                    <button type="button" id="ePicBtn" class="btn btn-white btn-info" name="ePicBtn">选择照片</button>
+                    <span id="ePicMsg"></span>
+                    <div id="picBar" name="picBar" class="col-xs-12"></div>
+                    <div id="picContant" name="picContant"></div>
+                    <input type="hidden" id="ePicIds" name="ePicIds" value="$!{tbEquipment.ePicIds}">
+                </div>
+            </div>
+
+            <div class="form-group col-xs-12">
+                <label class="col-xs-2 control-label no-padding-right" for="note">备注:</label>
+
+                <div class="col-xs-10">
+                    <textarea id="note" name="note" placeholder="请输入备注"
+                              class="col-xs-11 ui-autocomplete-input">#if($tbEquipment.note) $!{tbEquipment.note} #end</textarea>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="submit" id="submit-btn" name="submit-btn">
+            保存
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-white btn-info " type="reset" id="closeModal">
+            关闭
+        </button>
+    </div>
+</form>
+
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/add.js?_dc=$!{staticVersion}"></script>
+
+#parse("/cms/common/fileupload.vm")

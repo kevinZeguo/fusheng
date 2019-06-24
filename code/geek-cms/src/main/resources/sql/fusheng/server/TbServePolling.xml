@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.server.TbServePollingDao">
+
+    <sql id="polling_col">
+        sp.id id ,
+        sp.code code,
+        sp.customer_id customerId,
+        sp.eq_id eqId,
+        sp.service_engineer serviceEngineer,
+        sp.creator creator,
+        sp.created created,
+        sp.modifier modifier,
+        sp.modified modified,
+        sp.deleted deleted,
+      sp.envTemperature,sp.exhaustTemperature,sp.MPa,sp.hoursToStream,
+      sp.operatingPressure,sp.operatingOilPressure,sp.RSPressure,
+      sp.RTPressure,sp.STPressure,sp.RElectric,sp.SElectric,
+      sp.TElectric,sp.isFastening,sp.isTerminalNormal,sp.isOilBarrelsNormal,
+      sp.isFactory,sp.isThermalNormal,sp.isTemperatureNormal,
+      sp.isMotorNormal,sp.isRadiatorNormal,sp.isPipelinesNormal,sp.isMaintenanceNormal,
+      sp.isOilColorNormal,sp.isTightnessNormal,sp.isThreeFilterNormal,sp.isPulleyNormal,
+      sp.isCabinetNormal,sp.isPipeFilterNormal,sp.isDoorsNormal,sp.isAutomaticNormal,
+      sp.isUseEnvNormal,sp.isVolumeNormal,sp.isMRegularlyNormal,sp.isMotorRegularlyNormal,
+      sp.engineerSuggest,sp.feedback,sp.attitude,sp.serviceDate
+    </sql>
+
+
+    <select id="selectPollingCountByPage" resultType="int" parameterType="ServerQueryParam">
+        select count(1)
+        from tb_serve_polling sp
+        left join tb_customer tc on tc.c_id = sp.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sp.eq_id and te.deleted=0
+        where sp.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and sp.customer_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (sp.service_engineer = #{serviceEngineer} or sp.service_engineer like concat('%,',#{serviceEngineer}) or
+            sp.service_engineer like concat(#{serviceEngineer},',%') or sp.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sp.eq_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and sp.code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and sp.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and sp.created < #{endDate}
+            ]]>
+        </if>
+    </select>
+    <select id="selectPollingListByPage" resultType="TbServePolling" parameterType="ServerQueryParam">
+        select
+        <include refid="polling_col"/>,
+        tc.c_code cCode,tc.c_name cName,tc.contact contact,tc.pay_acct payAcct,
+        tc.post_code postCode,tc.address address,tc.phone phone, tc.tax_num taxNum,
+        te.e_code eCode,te.e_name eName,te.customer_id customerId,te.e_model eModel,
+        te.motor_brand motorBrand,te.make_num makeNum,te.elec_pan_model elecPanModel,
+        te.host_num hostNum,te.motor_make_date motorMakeDate,te.note note ,
+        te.old_host_num oldHostNum,te.make_date makeDate
+        from tb_serve_polling sp
+        left join tb_customer tc on tc.c_id = sp.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sp.eq_id and te.deleted=0
+        where sp.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and sp.customer_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (sp.service_engineer = #{serviceEngineer} or sp.service_engineer like concat('%,',#{serviceEngineer}) or
+            sp.service_engineer like concat(#{serviceEngineer},',%') or sp.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sp.eq_id = #{eqId}
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sp.eq_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and sp.code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and sp.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and sp.created < #{endDate}
+            ]]>
+        </if>
+        order by sp.id desc
+        limit #{start} ,#{limit}
+    </select>
+
+    <select id="selectById" resultType="TbServePolling" parameterType="java.lang.Integer">
+        select
+        <include refid="polling_col"/>,
+        tc.c_code cCode,tc.c_name cName,tc.contact contact,tc.pay_acct payAcct,
+        tc.post_code postCode,tc.address address,tc.phone phone, tc.tax_num taxNum,
+        te.e_code eCode,te.e_name eName,te.customer_id customerId,te.e_model eModel,
+        te.motor_brand motorBrand,te.make_num makeNum,te.elec_pan_model elecPanModel,
+        te.host_num hostNum,te.motor_make_date motorMakeDate,te.note note ,
+        te.old_host_num oldHostNum,te.make_date makeDate
+        from tb_serve_polling sp
+        left join tb_customer tc on tc.c_id = sp.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sp.eq_id and te.deleted=0
+        where sp.deleted = 0
+        and sp.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbServePolling">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_serve_polling ( code,customer_id,eq_id,service_engineer,
+        modifier,modified,creator,created,deleted,envTemperature,exhaustTemperature,
+        MPa,hoursToStream,operatingPressure,operatingOilPressure,RSPressure,RTPressure,
+        STPressure,RElectric,SElectric,TElectric,isFastening,isTerminalNormal,
+        isOilBarrelsNormal,isFactory,isThermalNormal,isTemperatureNormal,
+        isMotorNormal,isRadiatorNormal,isPipelinesNormal,isMaintenanceNormal,
+        isOilColorNormal,isTightnessNormal,isThreeFilterNormal,isPulleyNormal,
+        isCabinetNormal,isPipeFilterNormal,isDoorsNormal,isAutomaticNormal,
+        isUseEnvNormal,isVolumeNormal,isMRegularlyNormal,isMotorRegularlyNormal,
+        engineerSuggest,feedback,attitude,serviceDate)
+        values (#{code,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER},#{eqId,jdbcType=INTEGER},
+        #{serviceEngineer,jdbcType=VARCHAR},#{modifier,jdbcType=INTEGER},now(),#{creator,jdbcType=INTEGER},
+        now(),0,#{envTemperature},#{exhaustTemperature},#{MPa},#{hoursToStream},
+        #{operatingPressure},#{operatingOilPressure},#{RSPressure},#{RTPressure},
+        #{STPressure},#{RElectric},#{SElectric},#{TElectric},#{isFastening},
+        #{isTerminalNormal},#{isOilBarrelsNormal},#{isFactory},#{isThermalNormal},
+        #{isTemperatureNormal},#{isMotorNormal},#{isRadiatorNormal},#{isPipelinesNormal},
+        #{isMaintenanceNormal},#{isOilColorNormal},#{isTightnessNormal},#{isThreeFilterNormal},
+        #{isPulleyNormal},#{isCabinetNormal},#{isPipeFilterNormal},#{isDoorsNormal},
+        #{isAutomaticNormal},#{isUseEnvNormal},
+        #{isVolumeNormal},#{isMRegularlyNormal},#{isMotorRegularlyNormal},
+        #{engineerSuggest},#{feedback},#{attitude},#{serviceDate})
+    </insert>
+
+    <delete id="deleteById" parameterType="TbServePolling">
+        update tb_serve_polling set deleted = 1 ,modifier = #{modifier} , modified = now() where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbServePolling">
+        UPDATE tb_serve_polling
+        SET service_engineer = #{serviceEngineer},
+        envTemperature = #{envTemperature},
+        exhaustTemperature = #{exhaustTemperature},
+        MPa = #{MPa},
+        hoursToStream = #{hoursToStream},
+        operatingPressure = #{operatingPressure},
+        operatingOilPressure = #{operatingOilPressure},
+        RSPressure = #{RSPressure},
+        RTPressure = #{RTPressure},
+        STPressure = #{STPressure},
+        RElectric = #{RElectric},
+        SElectric = #{SElectric},
+        TElectric = #{TElectric},
+        isFastening = #{isFastening},
+        isTerminalNormal = #{isTerminalNormal},
+        isOilBarrelsNormal = #{isOilBarrelsNormal},
+        isFactory = #{isFactory},
+        isThermalNormal = #{isThermalNormal},
+        isTemperatureNormal = #{isTemperatureNormal},
+        isMotorNormal = #{isMotorNormal},
+        isRadiatorNormal = #{isRadiatorNormal},
+        isPipelinesNormal = #{isPipelinesNormal},
+        isMaintenanceNormal = #{isMaintenanceNormal},
+        isOilColorNormal = #{isOilColorNormal},
+        isTightnessNormal = #{isTightnessNormal},
+        isThreeFilterNormal = #{isThreeFilterNormal},
+        isPulleyNormal = #{isPulleyNormal},
+        isCabinetNormal = #{isCabinetNormal},
+        isPipeFilterNormal = #{isPipeFilterNormal},
+        isDoorsNormal = #{isDoorsNormal},
+        isAutomaticNormal = #{isAutomaticNormal},
+        isUseEnvNormal = #{isUseEnvNormal},
+        isVolumeNormal = #{isVolumeNormal},
+        isMRegularlyNormal = #{isMRegularlyNormal},
+        isMotorRegularlyNormal = #{isMotorRegularlyNormal},
+        engineerSuggest = #{engineerSuggest},
+        feedback = #{feedback},
+        attitude = #{attitude},
+        serviceDate = #{serviceDate},
+        modifier = #{modifier},
+        modified = now()
+      WHERE
+	id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

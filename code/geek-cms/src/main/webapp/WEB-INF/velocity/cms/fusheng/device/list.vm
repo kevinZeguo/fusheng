@@ -1,0 +1,91 @@
+#set($page_title=" 设备管理")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">设备管理</a>
+            </li>
+            <li class="active">设备管理</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="seach-bar">
+            <div class="row">
+                <div class="col-xs-4 search-condition">
+
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">设备机型</span>
+                        <input type="text" id="eModelQ" name="eModelQ" placeholder="请输入设备机型"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">制造号码</span>
+                        <input type="text" id="makeNumQ" name="makeNumQ" placeholder="请输入制造号码"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">主机号码</span>
+                        <input type="text" id="hostNumQ" name="hostNumQ" placeholder="输入主机号码"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">客户名称</span>
+                        <input id="cNameQ" name="cNameQ" type="text" placeholder="输入客户名称"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <button class="btn btn-primary btn-search btn-sm" type="button" id="queryBtn">
+                        <i class="icon-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-success button btn-sm" id="addDevice" style="height: 32px">
+                        <i class="icon-plus"></i>新增
+                    </button>
+                    <button type="button" class="btn btn-success button btn-sm" id="addDeviceBatch"
+                            style="height: 32px">
+                        <i class="icon-plus"></i>批量导入
+                    </button>
+                 </div>
+            </div>
+        </div>
+
+        <div class="row col-xs-12 tab-border">
+            <table id="device-grid-table"></table>
+            <div id="device-grid-pager"></div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/list.js?_dc=$!{staticVersion}"></script>
+#end
+
+##新增修改弹层页面
+#parse("/cms/fusheng/device/addModal.vm")

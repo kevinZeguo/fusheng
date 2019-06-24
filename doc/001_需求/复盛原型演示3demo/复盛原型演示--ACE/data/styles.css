@@ -1,0 +1,531 @@
+﻿.ax_default {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:400;
+  font-style:normal;
+  font-size:13px;
+  color:#333333;
+  text-align:center;
+  line-height:normal;
+}
+.box_1 {
+}
+.box_2 {
+}
+.box_3 {
+}
+._形状 {
+}
+._图片 {
+}
+.placeholder {
+}
+._一级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  font-size:32px;
+  text-align:left;
+}
+._二级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  font-size:24px;
+  text-align:left;
+}
+._三级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  font-size:18px;
+  text-align:left;
+}
+._四级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  font-size:14px;
+  text-align:left;
+}
+._五级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  text-align:left;
+}
+._六级标题 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:bold;
+  font-size:10px;
+  text-align:left;
+}
+.label {
+  font-size:14px;
+  text-align:left;
+}
+._文本段落 {
+  text-align:left;
+}
+._文本框 {
+  text-align:left;
+}
+._流程形状 {
+}
+._连接线 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#333333;
+  text-align:center;
+  line-height:normal;
+}
+.line {
+}
+.arrow {
+}
+._页面tab {
+}
+._红色提醒 {
+  font-family:'Microsoft YaHei Regular', 'Microsoft YaHei';
+  font-size:12px;
+  color:#FFFFFF;
+  text-align:center;
+}
+._日历悬停 {
+}
+._默认文字 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#323232;
+  text-align:left;
+}
+._下拉选项 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#323232;
+  text-align:left;
+}
+._一级面包屑文字 {
+  font-family:'微软雅黑 Bold', '微软雅黑';
+  font-weight:bold;
+  font-style:normal;
+  font-size:18px;
+  color:#2C4A93;
+  text-align:left;
+}
+._提示标题文字 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:bold;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._二级菜单文字 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._一级菜单 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:14px;
+  color:#7894AC;
+  text-align:left;
+}
+._表单表头右对齐 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:right;
+}
+._表单标题 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:bold;
+  font-style:normal;
+  font-size:12px;
+  color:#333333;
+  text-align:left;
+}
+._深蓝色选中文字 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#2C4A93;
+}
+._表格表头 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#333333;
+  text-align:left;
+}
+._表格 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._表格间隔色 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._表格悬停 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  text-align:left;
+}
+._表格选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._输入框默认 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#AFAFAF;
+  text-align:left;
+}
+._输入框选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  text-align:left;
+}
+._输入框输入完成 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#323232;
+  text-align:left;
+}
+._输入框出错 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._输入框出错提示弹框 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#E52229;
+  text-align:left;
+}
+._输入框禁用 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#CFCFCF;
+  text-align:left;
+}
+._多文本输入框默认 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#AFAFAF;
+  text-align:left;
+}
+._多文本输入框选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  text-align:left;
+}
+._多文本输入框输入完成 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#000000;
+  text-align:left;
+}
+._多文本输入框禁用 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#CFCFCF;
+  text-align:left;
+}
+._橙色系统提示 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#F47C00;
+  text-align:left;
+  line-height:25px;
+}
+._蓝色系统提示 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#69A3D3;
+  text-align:left;
+  line-height:25px;
+}
+._提示按钮默认 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#FFFFFF;
+  line-height:12px;
+}
+._提示按钮悬停 {
+  font-family:'Arial Normal', 'Arial';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#FFFFFF;
+  line-height:12px;
+}
+._悬停灰底弹框 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._一级按钮 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#FFFFFF;
+  text-align:left;
+}
+._一级按钮悬停 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#FFFFFF;
+  text-align:left;
+}
+._一级按钮禁用 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#DDDDDD;
+  text-align:left;
+}
+._二级按钮 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#323232;
+  text-align:left;
+}
+._表单内按钮 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._二级按钮禁用 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#C3C1C1;
+  text-align:left;
+}
+._二级按钮悬停 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#333333;
+  text-align:left;
+}
+._表单内按钮悬停 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:left;
+}
+._标签选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#2C4A93;
+  text-align:center;
+  line-height:20px;
+}
+._标签悬停 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#2C4A93;
+  text-align:center;
+}
+._标签默认 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#333333;
+  text-align:center;
+}
+._分页选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#FFFFFF;
+  text-align:center;
+}
+._分页按钮 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  text-align:center;
+}
+._弹窗 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#666666;
+  line-height:20px;
+}
+._左侧二级菜单选中底色 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#2C4A93;
+  text-align:left;
+}
+._登陆后顶菜单默认 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:16px;
+  color:#FFFFFF;
+  text-align:right;
+}
+._登陆后顶菜单选中 {
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+  font-size:16px;
+  color:#FFFFFF;
+  text-align:right;
+}
+._navbar-default__background_ {
+  font-family:'Arial Normal', 'Arial';
+  font-size:18px;
+  color:#5E5E5E;
+  line-height:20px;
+}
+._modal-dialogue_header {
+  font-family:'Arial Negreta', 'Arial';
+  font-weight:700;
+  font-style:normal;
+  font-size:18px;
+  line-height:25px;
+}
+._文本段落1 {
+  font-size:14px;
+  text-align:left;
+  line-height:20px;
+}
+._一级标题1 {
+  font-family:'Arial Negreta', 'Arial';
+  font-weight:700;
+  font-size:36px;
+  text-align:left;
+}
+._水平线 {
+}
+._表格1 {
+}
+._复选框 {
+  font-size:14px;
+  text-align:left;
+}
+._形状1 {
+  color:#330033;
+}
+._图片1 {
+  color:#000000;
+}
+._文本框1 {
+  font-size:14px;
+  text-align:left;
+}
+.text_field {
+  color:#000000;
+  text-align:left;
+}
+.droplist {
+  color:#000000;
+  text-align:left;
+}
+.checkbox {
+  text-align:left;
+}
+.radio_button {
+  text-align:left;
+}
+.primary_button {
+  color:#FFFFFF;
+}
+.button {
+}
+.text_area {
+  color:#000000;
+  text-align:left;
+}
+.html_button {
+  text-align:center;
+}
+.tree_node {
+  text-align:left;
+}
+.table_cell {
+}

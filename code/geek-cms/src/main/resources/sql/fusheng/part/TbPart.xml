@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.part.TbPartDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.part.TbPart">
+        <id column="p_id" property="pId" jdbcType="INTEGER"/>
+        <result column="p_code" property="pCode" jdbcType="VARCHAR"/>
+        <result column="p_name" property="pName" jdbcType="VARCHAR"/>
+        <result column="p_price" property="pPrice" jdbcType="DOUBLE"/>
+        <result column="p_pic" property="pPic" jdbcType="VARCHAR"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="file_ids" property="fileIds" jdbcType="VARCHAR"/>
+        <result column="stock_num" property="stockNum" jdbcType="DOUBLE"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    p_id, p_code, p_name, p_price, p_pic, note, stock_num,
+    creator, created, modifier, modified, deleted,file_ids
+  </sql>
+    <sql id="part_col">
+    p.p_id pId,p.p_code pCode,p.p_name pName,p.p_price pPrice,p.p_pic pPic,p.note note,p.file_ids fileIds,
+    p.creator creator,p.created created, p.modifier modifier,p.modified modified,p.deleted deleted
+  </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_part
+        where p_id = #{pId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    update tb_part set deleted = 1 ,modifier = #{userId} , modified = now() where p_id = #{pId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.part.TbPart">
+        <selectKey resultType="java.lang.Integer" keyProperty="pId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_part (p_code, p_name, p_price, p_pic, note, stock_num,
+        creator, created,deleted,file_ids)
+        values (#{pCode,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR},
+        #{pPrice,jdbcType=DOUBLE}, #{pPic,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},
+        0, #{creator,jdbcType=INTEGER}, now(),0,#{fileIds})
+    </insert>
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.part.TbPart">
+    update tb_part
+    set p_code = #{pCode,jdbcType=VARCHAR},
+      p_name = #{pName,jdbcType=VARCHAR},
+      p_price = #{pPrice,jdbcType=DOUBLE},
+      p_pic = #{pPic,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      file_ids = #{fileIds,jdbcType=VARCHAR},
+      stock_num = #{stockNum,jdbcType=DOUBLE},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now()
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+    <select id="selectPartCountByPage" resultType="int" parameterType="PartQueryParam">
+        select count(1) from tb_part p where p.deleted = 0
+        <if test="pCode != null and pCode !='' ">
+            and p.p_code like #{pCode}<!-- CONCAT(CONCAT('%', #{pCode}), '%')  -->
+        </if>
+        <if test="pName != null and pName != ''">
+            and p.p_name like #{pName}
+        </if>
+        <if test="pPrice != null  and  pPrice != '' and pPrice > 0">
+            and p.p_price = #{pPrice}
+        </if>
+        <if test="keyword != null and keyword!= ''">
+            and ( p.p_code like #{keyword} or p.p_name like #{keyword})
+        </if>
+        <if test="inEId != null and inEId != ''">
+            and EXISTS ( select 1 from tb_equ_part ep where ep.p_id = p.p_id and ep.deleted = 0 and ep.e_id = #{inEId})
+        </if>
+        <if test="outEId != null and outEId != ''">
+            and not EXISTS ( select 1 from tb_equ_part ep where ep.p_id = p.p_id and ep.deleted = 0 and ep.e_id = #{outEId})
+        </if>
+    </select>
+    <select id="selectPartListByPage" resultType="TbPart" parameterType="PartQueryParam">
+        select
+        <include refid="part_col"/>,
+        sum(pr.stock_num) stockNum,
+        DATE_FORMAT(p.created,'%Y-%m-%d') createdStr ,u.real_name creatorName
+        from tb_part p
+        left join tb_part_repertory pr on p.p_id = pr.p_id and pr.deleted = 0
+        left join sys_user u  on u.user_id = p.creator
+        where p.deleted = 0
+        <if test="pCode != null and pCode !='' ">
+            and p.p_code like #{pCode}<!-- CONCAT(CONCAT('%', #{pCode}), '%')  -->
+        </if>
+        <if test="pName != null and pName != ''">
+            and p.p_name like #{pName}
+        </if>
+        <if test="pPrice != null and  pPrice != '' and pPrice > 0">
+            and p.price = #{pPrice}
+        </if>
+        <if test="keyword != null and keyword!= ''">
+            and ( p.p_code like #{keyword} or p.p_name like #{keyword})
+        </if>
+        <if test="inEId != null and inEId != ''">
+            and EXISTS ( select 1 from tb_equ_part ep where ep.p_id = p.p_id and ep.deleted = 0 and ep.e_id = #{inEId})
+        </if>
+        <if test="outEId != null and outEId != ''">
+            and not EXISTS ( select 1 from tb_equ_part ep where ep.p_id = p.p_id and ep.deleted = 0 and ep.e_id = #{outEId})
+        </if>
+        group by p.p_id
+        order by p.p_id DESC
+        limit #{start} ,#{limit}
+    </select>
+
+    <select id="selectBypName" resultType="TbPart" parameterType="String">
+        select
+        <include refid="part_col"/>
+        from tb_part p
+        where p.deleted=0
+        and p.p_name= #{pName}
+    </select>
+
+    <select id="selectBypCode" resultType="TbPart" parameterType="String">
+        select
+        <include refid="part_col"/>
+        from tb_part p
+        where p.deleted=0
+        and p.p_code= #{pCode}
+    </select>
+
+    <update id="updateStockNumById" parameterType="TbPart">
+        update tb_part set stock_num = #{stockNum} where p_id = #{pId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectStoragePartList" parameterType="PartQueryParam" resultType="TbPart">
+        select
+        <include refid="part_col"/>
+        , pr.stock_num leftCount
+        from tb_part_repertory pr
+        left join tb_part p on pr.p_id = p.p_id and p.deleted = 0
+        where pr.deleted=0
+        <if test="keyword != null and keyword!= ''">
+            and (p.p_code like #{keyword} or p.p_name like #{keyword})
+        </if>
+        and pr.storage_id=#{storageId}
+        order by p.p_id desc
+        limit #{start}, #{limit}
+    </select>
+
+</mapper>

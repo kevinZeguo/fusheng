@@ -1,0 +1,139 @@
+#set($page_title=" 合同管理")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">合同管理</a>
+            </li>
+            <li class="active">合同管理</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="seach-bar">
+            <div class="row">
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">合同编号</span>
+                        <input id="contractCode" name="contractCode" type="text" placeholder="输入合同编号"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">客户名称</span>
+                        <input id="customerName" name="customerName" type="text" placeholder="输入客户名称"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">是否已开发票</span>
+                        <select id="isOpenInvoice" name="isOpenInvoice" class="form-control form-cnd">
+	                    	<option value="-1">--请选择--</option>
+	                    	<option value="0">否</option>
+	                    	<option value="1">是</option>
+                       </select>
+
+                        <!--<input id="queryContact" name="queryContact" type="text" placeholder="输入联系人姓名"-->
+                               <!--class="form-control form-cnd">-->
+                    </div>
+                </div>
+
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">是否已发货</span>
+                        <select id="isSendGoods" class="form-control form-cnd">
+                        	<option value="-1">--请选择--</option>
+                         	<option value="0">否</option>
+                        	<option value="1">是</option>
+                        </select>
+
+                        <!--<input id="queryServiceEngineer" name="queryServiceEngineer" type="text" placeholder="输入服务工程师姓名"-->
+                               <!--class="form-control form-cnd">-->
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">是否已回款</span>
+                        <select id="isCashBack" class="form-control form-cnd">
+                        	<option value="-1">--请选择--</option>
+                        	<option value="0">否</option>
+                        	<option value="1">是</option>
+                        </select>
+
+                        <!--<input id="queryServiceEngineer" name="queryServiceEngineer" type="text" placeholder="输入服务工程师姓名"-->
+                               <!--class="form-control form-cnd">-->
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">合同类型</span>
+                        <select id="queryContractType" class="form-control form-cnd">
+                        	<option value="-1">--请选择--</option>
+                        	<option value="0">销售合同</option>
+                        	<option value="1">采购合同</option>
+                        </select>
+
+                        <!--<input id="queryServiceEngineer" name="queryServiceEngineer" type="text" placeholder="输入服务工程师姓名"-->
+                               <!--class="form-control form-cnd">-->
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <button class="btn btn-primary btn-search btn-sm" type="button" id="queryBtn">
+                        <i class="icon-search"></i>搜索
+                    </button>
+                    <button type="button" class="btn btn-success button btn-sm" id="addContract" style="height: 32px">
+                        <i class="icon-plus"></i>新增
+                    </button>
+                    <button type="button" class="btn btn-success button btn-sm" id="exportContract" style="height: 32px">
+                        <i class="icon-plus"></i>导出合同
+                    </button>
+                    <!--<button type="button" class="btn btn-success button btn-sm" id="addBatch" style="height: 32px">-->
+                    <!--    <i class="icon-plus"></i>批量导入-->
+                    <!--</button>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-xs-12 tab-border" >
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<!--<script src="/plug-in/sys/user/listuser.js?_dc=$!{staticVersion}"></script>-->
+<script src="/plug-in/fusheng/contract/list.js?_dc=$!{staticVersion}"></script>
+#end
+
+<!--addModal-->
+<div class="modal fade cms-modal" id="addModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content contract-body">
+    </div>
+</div>
+<!--addModal-->

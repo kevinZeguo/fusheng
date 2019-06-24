@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.PartRepertoryRecordBillDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordBill">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="repertory_record_id" property="repertoryRecordId" jdbcType="INTEGER"/>
+        <result column="p_id" property="pId" jdbcType="INTEGER"/>
+        <result column="p_code" property="pCode" jdbcType="VARCHAR"/>
+        <result column="p_name" property="pName" jdbcType="VARCHAR"/>
+        <result column="supplier" property="supplier" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="num" property="num" jdbcType="DOUBLE"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="tax_amt" property="taxAmt" jdbcType="DOUBLE"/>
+        <result column="total_amt" property="totalAmt" jdbcType="DOUBLE"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, repertory_record_id, p_id, p_code, p_name, supplier, price, num, unit, tax_amt,
+    total_amt, note, creator, created, modifier, modified, deleted
+  </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_part_repertory_record_bill
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from tb_part_repertory_record_bill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByRecordId" parameterType="PartRepertoryRecord">
+        update tb_part_repertory_record_bill set deleted = 1 , modifier = #{modifier}, modified = now()
+        where repertory_record_id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordBill">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_part_repertory_record_bill ( repertory_record_id, p_id,
+        p_code, p_name, supplier,
+        price, num, unit, tax_amt,
+        total_amt, note, creator,
+        created, modifier, modified,
+        deleted)
+        values ( #{repertoryRecordId,jdbcType=INTEGER}, #{pId,jdbcType=INTEGER},
+        #{pCode,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR},
+        #{price,jdbcType=DOUBLE}, #{num,jdbcType=DOUBLE}, #{unit,jdbcType=VARCHAR}, #{taxAmt,jdbcType=DOUBLE},
+        #{totalAmt,jdbcType=DOUBLE}, #{note,jdbcType=VARCHAR},
+        #{creator,jdbcType=INTEGER},now(), #{modifier,jdbcType=INTEGER}, now(),0)
+    </insert>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertoryRecordBill">
+    update tb_part_repertory_record_bill
+    set supplier = #{supplier,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      num = #{num,jdbcType=DOUBLE},
+      unit = #{unit,jdbcType=VARCHAR},
+      tax_amt = #{taxAmt,jdbcType=DOUBLE},
+      total_amt = #{totalAmt,jdbcType=DOUBLE},
+      note = #{note,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByRepId" resultType="PartRepertoryRecordBill" parameterType="java.lang.Integer">
+        select
+        rb.id id, rb.repertory_record_id repertoryRecordId, rb.p_id pId,rb.supplier supplier, rb.price price,
+        rb.num num, rb.unit unit, rb.tax_amt taxAmt,rb.total_amt totalAmt,rb.note note, rb.creator creator,
+        rb.created created, rb.modifier modifier,rb.modified modified, rb.deleted deleted,tp.p_code pCode ,
+        tp.p_name pName
+        from tb_part_repertory_record_bill rb
+        left join tb_part tp on rb.p_id = tp.p_id
+        where rb.repertory_record_id = #{repertoryRecordId,jdbcType=INTEGER}
+        and rb.deleted = 0
+    </select>
+
+    <select id="selectRepertoryBillCount" resultType="int" parameterType="RepertoryQueryParam">
+        select count(1) from tb_part_repertory_record_bill rb
+        left join tb_part_repertory_record rr on rb.repertory_record_id = rr.id and rr.deleted = 0
+        left join tb_part_repertory_record_out ro on rr.id = ro.repertory_record_id and ro.deleted = 0
+        left join tb_customer tc on tc.c_id = ro.customer_id and tc.deleted = 0
+        left join tb_contract con on con.id = ro.contract_id and con.deleted = 0
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        where rb.deleted = 0
+        <if test="storageId!= null and storageId != '' and storageId > 0">
+            and rr.storage_id = #{storageId}
+        </if>
+        <if test="pId!= null and pId != '' and pId > 0">
+            and rb.p_id = #{pId}
+        </if>
+        <if test="repertoryType!= null and repertoryType != '' and repertoryType > 0">
+            and rr.repertory_type = #{repertoryType}
+        </if>
+        <if test="cId!= null and cId != '' and cId > 0">
+            and tc.c_id = #{cId}
+        </if>
+        <if test="recordId!= null and recordId != '' and recordId > 0">
+            and rr.id = #{recordId}
+        </if>
+    </select>
+
+    <sql id="bill_col">
+         rb.id id, rb.repertory_record_id repertoryRecordId, rb.p_id pId, rb.p_code pCode, rb.p_name pName,
+         rb.supplier supplier, rb.price price, rb.num num, rb.unit unit, rb.tax_amt taxAmt,rb.total_amt totalAmt,
+          rb.note note, rb.creator creator, rb.created created, rb.modifier modifier, rb.modified modified, rb.deleted deleted
+    </sql>
+
+    <select id="selectRepertoryBillList" resultType="PartRepertoryRecordBill" parameterType="RepertoryQueryParam">
+        select
+        <include refid="bill_col"/>, rr.repertory_type repertoryType,con.a_code contractCode,rr.storage_id storageId,
+        av.attr_value storageName,tc.c_name customerName ,su.real_name creatorName,
+        DATE_FORMAT(rb.created,'%Y-%m-%d') createdStr
+        from tb_part_repertory_record_bill rb
+        left join tb_part_repertory_record rr on rb.repertory_record_id = rr.id and rr.deleted = 0
+        left join tb_part_repertory_record_out ro on rr.id = ro.repertory_record_id and ro.deleted = 0
+        left join tb_customer tc on tc.c_id = ro.customer_id and tc.deleted = 0
+        left join tb_contract con on con.id = ro.contract_id and con.deleted = 0
+        left join sys_attr_value av on rr.storage_id =av.attr_id
+        left join sys_user su on su.user_id = rb.creator and su.deleted = 0
+        where rb.deleted = 0
+        and rr.status = 1
+        <if test="storageId!= null and storageId != '' and storageId > 0">
+            and rr.storage_id = #{storageId}
+        </if>
+        <if test="pId!= null and pId != '' and pId > 0">
+            and rb.p_id = #{pId}
+        </if>
+        <if test="repertoryType!= null and repertoryType != '' and repertoryType > 0">
+            and rr.repertory_type = #{repertoryType}
+        </if>
+        <if test="cId!= null and cId != '' and cId > 0">
+            and tc.c_id = #{cId}
+        </if>
+        <if test="recordId!= null and recordId != '' and recordId > 0">
+            and rr.id = #{recordId}
+        </if>
+        order by rb.id desc
+        limit #{start} , #{limit}
+    </select>
+
+
+</mapper>

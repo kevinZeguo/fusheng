@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.server.TbMaintenanceDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.server.TbMaintenance">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="m_code" property="mCode" jdbcType="VARCHAR"/>
+        <result column="c_id" property="cId" jdbcType="INTEGER"/>
+        <result column="e_id" property="eId" jdbcType="INTEGER"></result>
+        <result column="repair_content" property="repairContent" jdbcType="VARCHAR"></result>
+        <result column="service_engineer" property="serviceEngineer" jdbcType="VARCHAR"></result>
+        <result column="service_date" property="serviceDate" jdbcType="DATE"></result>
+        <result column="gear_speed" property="gearSpeed" jdbcType="DOUBLE"></result>
+        <result column="work_times" property="workTimes" jdbcType="DOUBLE"></result>
+        <result column="exhaust_pressure" property="exhaustPressure" jdbcType="DOUBLE"></result>
+        <result column="exhaust_temperature" property="exhaustTemperature" jdbcType="DOUBLE"></result>
+        <result column="running_voltage" property="runningVoltage" jdbcType="DOUBLE"></result>
+        <result column="running_elec" property="runningElec" jdbcType="DOUBLE"></result>
+        <result column="env_temperature" property="envTemperature" jdbcType="DOUBLE"></result>
+        <result column="oil_pressure" property="oilPressure" jdbcType="DOUBLE"></result>
+        <result column="fault_reason" property="faultReason" jdbcType="VARCHAR"></result>
+        <result column="service_content" property="serviceContent" jdbcType="VARCHAR"></result>
+        <result column="service_other_content" property="serviceOtherContent" jdbcType="VARCHAR"></result>
+        <result column="engineer_suggest" property="engineerSuggest" jdbcType="VARCHAR"></result>
+        <result column="service_fees" property="serviceFees" jdbcType="DOUBLE"></result>
+        <result column="file_ids" property="fileIds" jdbcType="VARCHAR"></result>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="formatServiceDate" property="formatServiceDate" jdbcType="VARCHAR"/>
+        <result column="cCode" property="cCode" jdbcType="VARCHAR"></result>
+        <result column="cName" property="cName" jdbcType="VARCHAR"/>
+        <result column="cAddress" property="cAddress" jdbcType="VARCHAR"></result>
+        <result column="cPhone" property="cPhone" jdbcType="VARCHAR"></result>
+        <result column="cContact" property="cContact" jdbcType="VARCHAR"></result>
+        <result column="host_num" property="hostNum" jdbcType="VARCHAR"/>
+        <result column="old_host_num" property="oldHostNum" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    	id, m_code, c_id,e_id,repair_content,service_engineer,service_date,gear_speed,
+    	work_times,exhaust_pressure,exhaust_temperature,running_voltage,file_ids,
+    	running_elec,oil_pressure,env_temperature,fault_reason,service_content,service_other_content,engineer_suggest,
+    	service_fees,note,
+    	creator, created, modifier, modified, deleted
+  	</sql>
+    <sql id="maintenance_col">
+        a.id id,
+		a.m_code mCode,
+		a.c_id cId,
+		a.e_id eId,
+		a.repair_content repairContent,
+		a.service_engineer serviceEngineer,
+		a.service_date serviceDate,
+		a.gear_speed gearSpeed,
+		a.work_times workTimes,
+		a.exhaust_pressure exhaustPressure,
+		a.exhaust_temperature exhaustTemperature,		
+		a.running_voltage runningVoltage,
+		a.running_elec runningElec,
+		a.env_temperature envTemperature,				
+		a.oil_pressure oilPressure,
+		a.fault_reason  faultReason,
+		a.service_content serviceContent,
+        a.service_other_content serviceOtherContent,
+        a.engineer_suggest engineerSuggest,
+		a.service_fees serviceFees,
+		a.file_ids fileIds,
+		a.c_view cView,
+		a.note note,
+		a.creator creator,
+		a.created created,
+		a.modifier modifier,
+		a.modified modified,
+		a.deleted deleted
+    </sql>
+    <select id="selectMaintenanceCountByPage" resultType="int" parameterType="ServerQueryParam">
+        select count(1) from tb_serve_maintenance a
+        left join tb_customer tc on tc.c_id = a.c_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=a.e_id and te.deleted=0
+        where a.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and a.c_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (a.service_engineer = #{serviceEngineer} or a.service_engineer like concat('%,',#{serviceEngineer}) or
+            a.service_engineer like concat(#{serviceEngineer},',%') or a.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and a.e_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and a.m_code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and a.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and a.created < #{endDate}
+            ]]>
+        </if>
+
+    </select>
+    <select id="selectMaintenanceListByPage" resultType="TbMaintenance" parameterType="ServerQueryParam">
+        select
+        <include refid="maintenance_col"/>,
+        DATE_FORMAT(a.service_date,'%Y-%m-%d') formatServiceDate,
+        DATE_FORMAT(te.motor_make_date,'%Y-%m-%d') formatMotorMakeDate,
+        tc.c_name cName,tc.c_code cCode,tc.contact,tc.address,tc.phone,tc.service_engineer serviceEngineer,
+        te.e_code eCode,te.e_name eName,te.e_model eModel,te.make_num makeNum,te.make_date makeDate,
+        te.host_num hostNum,te.old_host_num oldHostNum,te.motor_brand motorBrand,te.motor_make_date motorMakeDate
+        from tb_serve_maintenance a
+        left join tb_customer tc on tc.c_id= a.c_id
+        left join tb_equipment te on te.e_id=a.e_id
+        where a.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and a.c_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (a.service_engineer = #{serviceEngineer} or a.service_engineer like concat('%,',#{serviceEngineer}) or
+            a.service_engineer like concat(#{serviceEngineer},',%') or a.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and a.e_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and a.m_code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and a.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and a.created < #{endDate}
+            ]]>
+        </if>
+        order by a.id desc
+        limit #{start} ,#{limit}
+    </select>
+    <select id="selectById" resultType="TbMaintenance" parameterType="java.lang.Integer">
+        select
+        <include refid="maintenance_col"/>,
+        DATE_FORMAT(a.service_date,'%Y-%m-%d') formatServiceDate,
+        DATE_FORMAT(c.motor_make_date,'%Y-%m-%d') formatMotorMakeDate,
+        b.c_code cCode,b.c_name cName,b.contact cContact,b.phone cPhone,b.address cAddress,
+        b.service_engineer serviceEngineer,
+        c.e_name eName,c.e_code eCode,c.e_model eModel,c.make_num makeNum,c.make_date makeDate,
+        c.host_num hostNum,c.old_host_num oldHostNum,c.motor_brand motorBrand,c.motor_make_date motorMakeDate
+        from tb_serve_maintenance a
+        left join tb_customer b on a.c_id = b.c_id and b.deleted = 0
+        left join tb_equipment c on a.e_id=c.e_id and c.deleted=0
+        where a.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbMaintenance">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_serve_maintenance ( m_code,c_id,e_id,repair_content,service_engineer,service_date,
+        gear_speed,work_times,exhaust_pressure,exhaust_temperature,
+        running_voltage,running_elec,oil_pressure,env_temperature,fault_reason,service_content,service_other_content,engineer_suggest,
+        service_fees,note, creator,created,deleted,c_view,file_ids)
+        values (#{mCode,jdbcType=VARCHAR}, #{cId,jdbcType=INTEGER},#{eId,jdbcType=INTEGER},
+        #{repairContent,jdbcType=VARCHAR},#{serviceEngineer,jdbcType=VARCHAR},#{serviceDate,jdbcType=DATE},
+        #{gearSpeed,jdbcType=DOUBLE},#{workTimes,jdbcType=DOUBLE},#{exhaustPressure,jdbcType=DOUBLE},
+        #{exhaustTemperature,jdbcType=DOUBLE},#{runningVoltage,jdbcType=DOUBLE},#{runningElec,jdbcType=DOUBLE},
+        #{oilPressure,jdbcType=DOUBLE},#{envTemperature,jdbcType=DOUBLE},#{faultReason,jdbcType=VARCHAR},
+        #{serviceContent,jdbcType=VARCHAR},#{serviceOtherContent},#{engineerSuggest,jdbcType=VARCHAR},#{serviceFees,jdbcType=DOUBLE},
+        #{note,jdbcType=VARCHAR},#{creator,jdbcType=INTEGER},now(), 0,#{cView},#{fileIds})
+
+    </insert>
+
+    <delete id="deleteById" parameterType="TbMaintenance">
+    	update tb_serve_maintenance set deleted = 1 ,modifier = #{modifier} , modified = now() where id = #{id,jdbcType=INTEGER}
+  	</delete>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbMaintenance">
+    	update tb_serve_maintenance
+    	set
+    	repair_content = #{repairContent,jdbcType=VARCHAR},
+      	service_engineer=#{serviceEngineer,jdbcType=VARCHAR},
+      	service_date=#{serviceDate,jdbcType=DATE},
+      	gear_speed=#{gearSpeed,jdbcType=DOUBLE},
+      	work_times=#{workTimes,jdbcType=DOUBLE},
+      	exhaust_pressure=#{exhaustPressure,jdbcType=DOUBLE},
+      	env_temperature=#{envTemperature,jdbcType=DOUBLE},
+      	running_voltage=#{runningVoltage,jdbcType=DOUBLE},
+      	running_elec=#{runningElec,jdbcType=DOUBLE},
+      	exhaust_temperature=#{exhaustTemperature,jdbcType=DOUBLE},
+      	oil_pressure=#{oilPressure,jdbcType=DOUBLE},
+      	fault_reason=#{faultReason,jdbcType=VARCHAR},
+      	service_content=#{serviceContent,jdbcType=VARCHAR},
+        service_other_content = #{serviceOtherContent},
+        engineer_suggest=#{engineerSuggest,jdbcType=VARCHAR},
+      	service_fees=#{serviceFees,jdbcType=DOUBLE},
+      	c_view=#{cView,jdbcType=VARCHAR},
+      	note=#{note,jdbcType=VARCHAR},
+      	file_ids=#{fileIds,jdbcType=VARCHAR},
+      	modifier = #{modifier,jdbcType=INTEGER},
+      	modified = now() 
+    	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByCode" resultType="TbMaintenance" parameterType="String">
+        select
+        <include refid="maintenance_col"/>
+        from tb_serve_maintenance a
+        where a.deleted=0
+        and a.m_code= #{mCode}
+    </select>
+</mapper>

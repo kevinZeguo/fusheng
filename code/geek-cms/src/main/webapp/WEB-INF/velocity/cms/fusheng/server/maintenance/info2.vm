@@ -1,0 +1,285 @@
+#set($page_title=" 维保详情")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="/server/maintenance/index.html">维保服务</a>
+            </li>
+            <li class="active">维保详情</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+        <form class="form-horizontal form-inline" id="data-form">
+            <input type="hidden" id="id" name="id" value="$!{maintenance.id}"/>
+            <input type="hidden" class="hidden" id="cNameI" name="cNameI" value="$!{maintenance.cId}"/>
+            <input type="hidden" class="hidden" id="eNameI" name="eNameI" value="$!{maintenance.eId}"/>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 服务单号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cCode">$!{maintenance.mCode}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户代码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cCode">$!{maintenance.cCode}</span>
+                </div>
+            </div>			
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cName">$!{maintenance.cName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 客户电话:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cPhone">$!{maintenance.cPhone}</span>
+                </div>
+            </div>			
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 客户地址:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cAddress">$!{maintenance.cAddress}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 联系人:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cContact">$!{maintenance.cContact}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 服务工程师:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="serviceEngineerName">$!{maintenance.serviceEngineerName}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 服务日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="serviceDate">$!{maintenance.formatServiceDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 报修内容:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="repairContent">$!{maintenance.repairContent}</span>
+                </div>
+            </div>	
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 故障原因:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="faultReason">$!{maintenance.faultReason}</span>
+                </div>
+            </div>
+			<div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 主机编号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="hostNum">
+						#if($!{maintenance.hostNum} != "")
+							$!{maintenance.hostNum}
+						#elseif ($!{maintenance.oldHostNum} != "")
+							$!{maintenance.oldHostNum}
+						#else
+							--
+						#end
+					</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 制造号码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="makeNum">$!{maintenance.makeNum}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 制造日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="makeDate">$!{maintenance.makeDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 产品型式:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="eModel">$!{maintenance.eModel}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 运转时数:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="workTimes">$!{maintenance.workTimes}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 齿轮速比:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="gearSpeed">$!{maintenance.gearSpeed}</span>
+                </div>
+            </div>				
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机厂牌:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="motorBrand">$!{maintenance.motorBrand}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机生产日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="motorMakeDate">$!{maintenance.formatMotorMakeDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 制造日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="makeDate">$!{maintenance.makeDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 排气压力(MPa):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="exhaustPressure">$!{maintenance.exhaustPressure}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 排气温度(℃):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="exhaustTemperature">$!{maintenance.exhaustTemperature}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 环境温度(℃):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="envTemperature">$!{maintenance.envTemperature}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 油压(MPa):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="oilPressure">$!{maintenance.oilPressure}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 运转电压(V):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="runningVoltage">$!{maintenance.runningVoltage}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 运转电流(A):
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="runningElec">$!{maintenance.runningElec}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 服务内容:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="serviceContent">$!{maintenance.serviceContent}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 服务人员建议:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="engineerSuggest">$!{maintenance.engineerSuggest}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 用户意见:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="cView">$!{maintenance.cView}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 备注:
+                </label>
+
+                <div class="col-xs-7" style="overflow:auto;">
+                    <span id="note">$!{maintenance.note}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 照片:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="picIds"></span>
+                </div>
+            </div>				
+        </form>
+	</div>
+</div>
+	
+#define($javascriptBlock)
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/server/maintenance/info.js?_dc=$!{staticVersion}"></script>
+#end

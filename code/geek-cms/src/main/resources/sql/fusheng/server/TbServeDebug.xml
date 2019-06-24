@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.server.TbServeDebugDao">
+    <sql id="debug_col">
+        sd.id id ,
+        sd.code code,
+        sd.customer_id customerId,
+        sd.eq_id eqId,
+        sd.service_engineer serviceEngineer,
+        sd.debug_date debugDate,
+        sd.file_ids fileIds,
+        sd.creator creator,
+        sd.created created,
+        sd.modifier modifier,
+        sd.modified modified,
+        sd.deleted deleted
+    </sql>
+
+
+    <select id="selectDebugCountByPage" resultType="int" parameterType="ServerQueryParam">
+        select count(1)
+        from tb_serve_debug sd
+        left join tb_customer tc on tc.c_id = sd.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sd.eq_id and te.deleted=0
+        where sd.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and sd.customer_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (sd.service_engineer = #{serviceEngineer} or sd.service_engineer like concat('%,',#{serviceEngineer}) or
+            sd.service_engineer like concat(#{serviceEngineer},',%') or sd.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sd.eq_id = #{eqId}
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sd.eq_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and sd.code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and sd.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and sd.created < #{endDate}
+            ]]>
+        </if>
+    </select>
+    <select id="selectDebugListByPage" resultType="TbServeDebug" parameterType="ServerQueryParam">
+        select
+        <include refid="debug_col"/>,
+        tc.c_code cCode,tc.c_name cName,tc.contact contact,tc.pay_acct payAcct,
+        tc.post_code postCode,tc.address address,tc.phone phone, tc.tax_num taxNum,
+        te.e_code eCode,te.e_name eName,te.customer_id customerId,te.e_model eModel,
+        te.motor_brand motorBrand,te.make_num makeNum,te.elec_pan_model elecPanModel,
+        te.host_num hostNum,te.motor_make_date motorMakeDate,te.note note ,
+        te.old_host_num oldHostNum,te.make_date makeDate
+        from tb_serve_debug sd
+        left join tb_customer tc on tc.c_id = sd.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sd.eq_id and te.deleted=0
+        where sd.deleted = 0
+        <if test="customerId != null and customerId!= ''">
+            and sd.customer_id = #{customerId}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and (sd.service_engineer = #{serviceEngineer} or sd.service_engineer like concat('%,',#{serviceEngineer}) or
+            sd.service_engineer like concat(#{serviceEngineer},',%') or sd.service_engineer like
+            concat('%,', #{serviceEngineer} ,',%' ))
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sd.eq_id = #{eqId}
+        </if>
+        <if test="eqId != null and eqId != ''">
+            and sd.eq_id = #{eqId}
+        </if>
+        <if test="key != null and key != ''">
+            and sd.code like #{key}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+            and sd.created > #{startDate}
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+            and sd.created < #{endDate}
+            ]]>
+        </if>
+        order by sd.id desc
+        limit #{start} ,#{limit}
+    </select>
+
+    <select id="selectById" resultType="TbServeDebug" parameterType="java.lang.Integer">
+        select
+        <include refid="debug_col"/>,
+        tc.c_code cCode,tc.c_name cName,tc.contact contact,tc.pay_acct payAcct,
+        tc.post_code postCode,tc.address address,tc.phone phone, tc.tax_num taxNum,
+        te.e_code eCode,te.e_name eName,te.customer_id customerId,te.e_model eModel,
+        te.motor_brand motorBrand,te.make_num makeNum,te.elec_pan_model elecPanModel,
+        te.host_num hostNum,te.motor_make_date motorMakeDate,te.note note ,
+        te.old_host_num oldHostNum,te.make_date makeDate
+        from tb_serve_debug sd
+        left join tb_customer tc on tc.c_id = sd.customer_id and tc.deleted = 0
+        left join tb_equipment te on te.e_id=sd.eq_id and te.deleted=0
+        where sd.deleted = 0
+        and sd.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbServeDebug">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_serve_debug ( code,customer_id,eq_id,service_engineer,debug_date,file_ids,
+        modifier,modified,creator,created,deleted)
+        values (#{code,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER},#{eqId,jdbcType=INTEGER},
+        #{serviceEngineer,jdbcType=INTEGER},#{debugDate},#{fileIds},#{modifier,jdbcType=INTEGER},now(),#{creator,jdbcType=INTEGER},now(),
+        0)
+    </insert>
+
+    <delete id="deleteById" parameterType="TbServeDebug">
+    	update tb_serve_debug set deleted = 1 ,modifier = #{modifier} , modified = now() where id = #{id,jdbcType=INTEGER}
+  	</delete>
+
+    <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.server.TbServeDebug">
+    	update tb_serve_debug
+    	set
+    	customer_id = #{customerId},
+    	eq_id = #{eqId},
+    	service_engineer = #{serviceEngineer},
+        service_engineer = #{serviceEngineer},
+        debug_date = #{debugDate},
+        file_ids = #{fileIds},
+        modifier = #{modifier},
+        modified = now()
+    	where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

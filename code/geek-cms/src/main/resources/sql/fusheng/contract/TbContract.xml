@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.contract.TbContractDao" >
+  <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.contract.TbContract" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="a_code" property="aCode" jdbcType="VARCHAR" />
+    <result column="b_code" property="bCode" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="c_id" property="cId" jdbcType="INTEGER" />
+    <result column="c_name" property="cName" jdbcType="VARCHAR" />
+    <result column="file_ids" property="fileIds" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="is_cash_back" property="isCashBack" jdbcType="INTEGER" />
+    <result column="cash_back_date" property="cashBackDate" jdbcType="DATE"></result>
+    <result column="cash_back_price" property="cashBackPrice" jdbcType="DOUBLE"></result>
+    <result column="is_send_goods" property="isSendGoods" jdbcType="INTEGER" />
+    <result column="send_goods_date" property="sendGoodsDate" jdbcType="DATE"></result>
+    <result column="is_open_invoice" property="isOpenInvoice" jdbcType="INTEGER" />
+    <result column="open_invoice_date" property="openInvoiceDate" jdbcType="DATE"></result>
+    <result column="note" property="note" jdbcType="VARCHAR"></result>
+    <result column="cashBackDateFormat" property="cashBackDateFormat" jdbcType="VARCHAR"></result>
+    <result column="sendGoodsDateFormat" property="sendGoodsDateFormat" jdbcType="VARCHAR"></result>
+    <result column="openInvoiceDateFormat" property="openInvoiceDateFormat" jdbcType="VARCHAR"></result>
+    <result column="contractFile" property="contractFile" jdbcType="VARCHAR"></result>
+    <result column="creator" property="creator" jdbcType="INTEGER" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modifier" property="modifier" jdbcType="INTEGER" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    c.id id, c.a_code aCode, c.b_code bCode, c.type type, c.c_id cId, c1.c_name cName, c.price price, 
+    c.is_cash_back isCashBack,c.cash_back_price cashBackPrice,c.cash_back_date cashBackDate, 
+    c.is_send_goods isSendGoods,c.send_goods_date sendGoodsDate, 
+    c.is_open_invoice isOpenInvoice, c.open_invoice_date openInvoiceDate,c.note note, c.file_ids fileIds,
+    c.creator creator, c.created created, c.modifier modifier, c.modified modified, c.deleted deleted
+  </sql>
+  <sql id="contract_col">
+    c.a_code aCode,c.b_code bCode,c.c_id cId,c1.c_name cName,c.type type,c.price price,
+    c.is_cash_back isCashBack,c.cash_back_price cashBackPrice,c.cash_back_date cashBackDate,
+    c.is_send_goods isSendGoods,c.send_goods_date sendGoodsDate,c.file_ids fileIds,
+    c.is_open_invoice isOpenInvoice, c.open_invoice_date openInvoiceDate,c.note note, 
+    c.creator creator,c.created created, c.modifier modifier,c.modified modified,c.deleted deleted,
+    c.id id
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />,
+    DATE_FORMAT(c.cash_back_date,'%Y-%m-%d') cashBackDateFormat,
+    DATE_FORMAT(c.send_goods_date,'%Y-%m-%d') sendGoodsDateFormat,
+    DATE_FORMAT(c.open_invoice_date,'%Y-%m-%d') openInvoiceDateFormat  
+    from tb_contract c,tb_customer c1 
+    where c.id = #{id,jdbcType=INTEGER} and c.c_id = c1.c_id
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    update tb_contract set deleted = 1 ,modifier = #{userId} , modified = now() where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.contract.TbContract" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+        SELECT LAST_INSERT_ID()
+    </selectKey>   
+    insert into tb_contract (a_code, b_code, 
+      type, c_id, price, 
+      is_cash_back,cash_back_date,cash_back_price, is_send_goods,send_goods_date,
+      is_open_invoice, open_invoice_date,note, file_ids,
+      creator, created,deleted)
+    values (#{aCode,jdbcType=VARCHAR}, #{bCode,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{cId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, 
+      #{isCashBack,jdbcType=INTEGER},#{cashBackDate,jdbcType=DATE},#{cashBackPrice,jdbcType=DOUBLE}, 
+      #{isSendGoods,jdbcType=INTEGER},#{sendGoodsDate,jdbcType=DATE}, 
+      #{isOpenInvoice,jdbcType=INTEGER},#{openInvoiceDate,jdbcType=DATE},#{note,jdbcType=VARCHAR},#{fileIds},
+      #{creator,jdbcType=INTEGER}, now(),0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.beijing.geek.cms.fusheng.domain.contract.TbContract" >
+    insert into tb_contract
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aCode != null and aCode != ''" >
+        a_code,
+      </if>
+      <if test="bCode != null and bCode != ''" >
+        b_code,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="cId != null" >
+        c_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="isCashBack != null" >
+        is_cash_back,
+      </if>
+      <if test="cashBackPrice != null">
+      	cash_back_price,
+      </if>
+      <if test="cashBackDate != null">
+      	cash_back_date,
+      </if>
+      <if test="isSendGoods != null" >
+        is_send_goods,
+      </if>
+      <if test="sendGoodsDate != null">
+      	send_goods_date,
+      </if>
+      <if test="isOpenInvoice != null" >
+        is_open_invoice,
+      </if>
+      <if test="openInvoiceDate != null">
+      	open_invoice_date,
+      </if>
+      <if test="note != null">
+      	note,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+        created,
+        deleted
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aCode != null and aCode != ''" >
+        #{aCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bCode != null and bCode != ''" >
+        #{bCode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="cId != null" >
+        #{cId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="isCashBack != null" >
+        #{isCashBack,jdbcType=INTEGER},
+      </if>
+      <if test="cashBackPrice != null">
+      	#{cashBackPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cashBackDate != null">
+      	#{cashBackDate,jdbcType=DATE},
+      </if>
+      <if test="isSendGoods != null" >
+        #{isSendGoods,jdbcType=INTEGER},
+      </if>
+      <if test="sendGoodsDate != null">
+      	#{sendGoodsDate,jdbcType=DATE},
+      </if>
+      <if test="isOpenInvoice != null" >
+        #{isOpenInvoice,jdbcType=INTEGER},
+      </if>
+      <if test="openInvoiceDate != null">
+      	#{openInvoiceDate,jdbcType=DATE},
+      </if>
+      <if test="note != null">
+      	#{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=INTEGER},
+      </if>
+      now(),0
+    </trim>
+  </insert>
+  <update id="updateByIdSelective" parameterType="com.beijing.geek.cms.fusheng.domain.contract.TbContract" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+    -->
+    update tb_contract
+    <set >
+      <if test="aCode != null and aCode != ''" >
+        a_code = #{aCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bCode != null and bCode != ''" >
+        b_code = #{bCode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="cId != null" >
+        c_id = #{cId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="fileIds != null" >
+        file_ids = #{fileIds,jdbcType=VARCHAR},
+      </if>
+      <if test="isCashBack != null" >
+        is_cash_back = #{isCashBack,jdbcType=INTEGER},
+      </if>
+      <if test="cashBackPrice != null">
+      	#{cashBackPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="cashBackDate != null">
+      	#{cashBackDate,jdbcType=DATE},
+      </if>
+      <if test="isSendGoods != null" >
+        is_send_goods = #{isSendGoods,jdbcType=INTEGER},
+      </if>
+      <if test="sendGoodsDate != null">
+      	#{sendGoodsDate,jdbcType=DATE},
+      </if>
+      <if test="isOpenInvoice != null" >
+        is_open_invoice = #{isOpenInvoice,jdbcType=INTEGER},
+      </if>
+       <if test="openInvoiceDate != null">
+      	#{openInvoiceDate,jdbcType=DATE},
+      </if>
+      <if test="note != null">
+      	#{note,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=INTEGER},
+      </if>
+      modified=now()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateById" parameterType="com.beijing.geek.cms.fusheng.domain.contract.TbContract" >
+    update tb_contract
+    set a_code = #{aCode,jdbcType=VARCHAR},
+      b_code = #{bCode,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      is_cash_back = #{isCashBack,jdbcType=INTEGER},
+      cash_back_price=#{cashBackPrice,jdbcType=DOUBLE},
+      cash_back_date=#{cashBackDate,jdbcType=DATE},
+      is_send_goods = #{isSendGoods,jdbcType=INTEGER},
+      send_goods_date=#{sendGoodsDate,jdbcType=DATE},
+      is_open_invoice = #{isOpenInvoice,jdbcType=INTEGER},
+      open_invoice_date=#{openInvoiceDate,jdbcType=DATE},
+      note=#{note,jdbcType=VARCHAR},
+      file_ids=#{fileIds,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectContractCountByPage" resultType="int" parameterType="ContractQueryParam">
+        select 
+        count(1) 
+        from tb_contract c,tb_customer c1  
+        where c.deleted = 0 and c.c_id=c1.c_id
+        <if test="contractCode != null and contractCode !='' ">
+            and c.a_code like CONCAT(CONCAT('%', #{contractCode}), '%') 
+            or c.b_code like CONCAT(CONCAT('%', #{contractCode}), '%') 
+        </if>
+        <if test="customerName != null and customerName != ''">
+        	and c1.c_name like CONCAT(CONCAT('%', #{customerName}), '%') 
+        </if>
+        <if test="isOpenInvoice != -1">
+        	and c.is_open_invoice = #{isOpenInvoice,jdbcType=INTEGER}
+        </if>
+        <if test="isSendGoods != -1">
+        	and c.is_send_goods = #{isSendGoods,jdbcType=INTEGER}
+        </if>
+        <if test="cId!= null and cId != ''">
+            and c.c_id = #{cId,jdbcType=INTEGER}
+        </if>
+        <if test="isCashBack != -1">
+        	and c.is_cash_back = #{isCashBack}
+        </if>
+        <if test="queryContractType != -1">
+        	and c.type = #{queryContractType,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectContractListByPage" resultType="TbContract" parameterType="ContractQueryParam">
+        select
+        <include refid="contract_col"/>,
+        DATE_FORMAT(c.cash_back_date,'%Y-%m-%d') cashBackDateFormat,
+    	DATE_FORMAT(c.send_goods_date,'%Y-%m-%d') sendGoodsDateFormat,
+    	DATE_FORMAT(c.open_invoice_date,'%Y-%m-%d') openInvoiceDateFormat   
+        from tb_contract c,tb_customer c1
+        where c.deleted = 0 and c.c_id=c1.c_id 
+        <if test="contractCode != null and contractCode !='' ">
+            and c.a_code like #{contractCode} <!-- CONCAT(CONCAT('%', #{contractCode}), '%')  -->
+            or c.b_code like #{contractCode} 
+        </if>
+        <if test="customerName != null and customerName != ''">
+        	and c1.c_name like #{customerName}
+        </if>
+        <if test="isOpenInvoice != -1">
+        	and c.is_open_invoice = #{isOpenInvoice,jdbcType=INTEGER}
+        </if>
+        <if test="isSendGoods != -1">
+        	and c.is_send_goods = #{isSendGoods,jdbcType=INTEGER}
+        </if>
+        <if test="cId!= null and cId != ''">
+            and c.c_id = #{cId,jdbcType=INTEGER}
+        </if>
+        <if test="isCashBack != -1">
+        	and c.is_cash_back = #{isCashBack}
+        </if>
+        <if test="queryContractType != -1">
+        	and c.type = #{queryContractType,jdbcType=INTEGER}
+        </if>
+        order by c.id desc
+        limit #{start} ,#{limit}
+    </select>
+</mapper>

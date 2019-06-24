@@ -1,0 +1,187 @@
+#set($page_title="设备调试单")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content" id="mainContenter">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">运营服务</a>
+            </li>
+            <li>
+                <a href="/serve/debugeq/list.html">调试服务</a>
+            </li>
+            <li class="active">
+                #if($add == "add")
+                    录入调试单
+                #else
+                    编辑调试单
+                #end
+            </li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="page-content-area">
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form-horizontal" id="debugForm" role="form">
+                        <input type="hidden" id="id" name="id" value="$!{serveDebug.id}">
+                        <input type="hidden" id="fileIds" name="fileIds" value="$!{serveDebug.fileIds}">
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="cName">* 客户名称:</label>
+
+                            <div class="col-xs-8">
+                                <input id="cId" name="cId" value="$!{customerId}" #if($!{customerId})
+                                       disabled
+                                #end
+                                       class=" col-xs-12 ui-autocomplete-input">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="phone"> 客户电话:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="phone" name="phone" value="$!{serveDebug.phone}"
+                                       class=" col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="address"> 客户地址:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="address" name="address" value="$!{serveDebug.address}"
+                                       class=" col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="contact"> 联系人:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="contact" name="contact" value="$!{serveDebug.contact}"
+                                       class=" col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="eId"><a
+                                    class="red">*</a> 主机号码:</label>
+
+                            <div class=" col-xs-8">
+                                <input type="text" id="eId" name="eId"
+                                       class="col-xs-12 ui-autocomplete-input"
+                                       value="$!{eId}" #if($eId) disabled #end
+                                       placeholder="请选择主机号码"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="eModel"> 设备型号:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="eModel" name="eModel" value="$!{serveDebug.eModel}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="fax">电机厂牌:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="motorBrand" name="motorBrand" value="$!{serveDebug.motorBrand}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="payAcct">制造号码:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="makeNum" name="makeNum" value="$!{serveDebug.makeNum}"
+                                       class=col-xs-12 ui-autocomplete-input" readonly
+                                placeholder=""/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="serviceEngineer">
+                                服务工程师:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="serviceEngineer" value="$!{serveDebug.serviceEngineer}"
+                                       name="serviceEngineer"
+                                       class=" col-xs-12 ui-autocomplete-input"
+                                       placeholder="请选择服务工程师"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="serviceEngineer">
+                                调试日期:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="debugDate" value="$!{serveDebug.debugDate}"
+                                       name="debugDate"
+                                       class=" col-xs-12 ui-autocomplete-input"
+                                       placeholder="请选择调试日期"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="serviceEngineer">
+                                调试照片:</label>
+
+                            <div class="col-xs-10">
+                                 <span id="picSpan" name="picSpan" class="col-xs-7"
+                                       style="border: 1px solid silver;height: 34px;padding-top: 6px;"></span>
+                                <button type="button" id="debugPicBtn" class="btn btn-white btn-info"
+                                        name="debugPicBtn">选择图片
+                                </button>
+                                <span id="ePicMsg"></span>
+
+                                <div id="picBar" name="picBar" class="col-xs-12"></div>
+                                <div id="picContant" name="picContant"></div>
+                                <input type="hidden" id="picIds" name="picIds" value="$!{serveDebug.picIds}">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 clearfix form-actions align-right">
+                            <button class="btn btn-sm btn-primary" type="submit" id="saveOut" name="saveOut">
+                                保存
+                            </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-white btn-info " type="button"
+                                    onclick="javaScript:window.history.go(-1)" id="closeAdd">
+                                返回
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/plug-in/sys/user/listuser.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/listhostnum.js?_dc=$!{staticVersion}"></script>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/server/debugeq/add.js?_dc=$!{staticVersion}"></script>
+#parse("/cms/common/fileupload.vm")

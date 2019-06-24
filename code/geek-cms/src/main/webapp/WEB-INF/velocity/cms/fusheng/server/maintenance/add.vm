@@ -1,0 +1,351 @@
+#set($page_title="设备维保单")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content" id="mainContenter">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">运营服务</a>
+            </li>
+            <li>
+                <a href="/serve/debugeq/list.html">维保服务</a>
+            </li>
+            <li class="active">
+                #if($add == "add")
+                    录入维保单
+                #else
+                    编辑维保单
+                #end
+            </li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="page-content-area">
+            <div class="row">
+                <div class="col-xs-12">
+                    <form class="form-horizontal" id="maintenanceForm" role="form">
+                        <input type="hidden" id="id" name="id" value="$!{maintenance.id}">
+                        <input type="hidden" id="fileIds" name="fileIds" value="$!{maintenance.fileIds}">
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="cId"><a
+                                    class="red">*</a> 客户名称:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="cId" name="cId"
+                                       class="col-xs-12 ui-autocomplete-input"
+                                       value="$!{customerId}" #if($customerId) disabled #end
+                                       placeholder="请选择客户"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="phone"> 客户电话:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="phone" name="phone" value="$!{maintenance.cPhone}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="address"> 客户地址:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="address" name="address" value="$!{maintenance.cAddress}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="contact"> 联系人:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="contact" name="contact" value="$!{maintenance.cContact}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="eId"><a
+                                    class="red">*</a> 主机号码:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="eId" name="eId"
+                                       class="col-xs-12 ui-autocomplete-input"
+                                       value="$!{deviceId}" #if($deviceId) disabled #end
+                                       placeholder="请选择主机号码"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="eModel"> 设备型号:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="eModel" name="eModel" value="$!{maintenance.eModel}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="fax">电机厂牌:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="motorBrand" name="motorBrand" value="$!{maintenance.motorBrand}"
+                                       class="col-xs-12 ui-autocomplete-input" readonly
+                                       placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="payAcct">制造号码:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="makeNum" name="makeNum" value="$!{maintenance.makeNum}"
+                                       class=col-xs-12 ui-autocomplete-input" readonly
+                                placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="repairContent"><a
+                                    class="red">*</a> 报修内容:</label>
+
+                            <div class="col-xs-10">
+                    <textarea id="repairContent" name="repairContent"
+                              class="col-xs-12 ui-autocomplete-input">$!{maintenance.repairContent}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="gearSpeed">
+                                齿轮速比:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="gearSpeed" name="gearSpeed"
+                                       value="$!{maintenance.gearSpeed}" class="col-xs-12 ui-autocomplete-input"
+                                       placeholder="请输入齿轮速比" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="workTimes">
+                                运转时数:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="workTimes" name="workTimes"
+                                       value="$!{maintenance.workTimes}" class="col-xs-12 ui-autocomplete-input"
+                                       placeholder="请输入运转时数" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="exhaustPressure">
+                                排气压力(MPa):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="exhaustPressure" name="exhaustPressure"
+                                       value="$!{maintenance.exhaustPressure}" class="col-xs-12 ui-autocomplete-input"
+                                       placeholder="请输入排气压力" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="envTemperature">
+                                环境温度(℃):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="envTemperature" name="envTemperature"
+                                       value="$!{maintenance.envTemperature}" class="col-xs-12 ui-autocomplete-input"
+                                       placeholder="请输入环境温度" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="runningVoltage">
+                                运转电压(V):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="runningVoltage" name="runningVoltage"
+                                       value="$!{maintenance.runningVoltage}"
+                                       class="col-xs-12 ui-autocomplete-input" placeholder="请输入运转电压"
+                                       onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="runningElec">
+                                运转电流(A):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="runningElec" name="runningElec"
+                                       value="$!{maintenance.runningElec}"
+                                       class="col-xs-12 ui-autocomplete-input" placeholder="请输入运转时长"
+                                       onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="exhaustTemperature">
+                                排气温度(℃):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="exhaustTemperature" name="exhaustTemperature"
+                                       value="$!{maintenance.exhaustTemperature}"
+                                       class="col-xs-12 ui-autocomplete-input" placeholder="请输入排气温度"
+                                       onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="oilPressure">
+                                油压(MPa):</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="oilPressure" name="oilPressure"
+                                       value="$!{maintenance.oilPressure}"
+                                       class="col-xs-12 ui-autocomplete-input" placeholder="请输入油压"
+                                       onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="faultReason">
+                                故障原因:</label>
+
+                            <div class="col-xs-10">
+                    <textarea id="faultReason" name="faultReason"
+                              class="col-xs-12 ui-autocomplete-input">$!{maintenance.faultReason}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="serviceContent">
+                                服务内容:</label>
+
+                            <div class="col-xs-10 checkbox">
+                                #foreach($content in $contents)
+                                    <label>
+                                        <input class="ace ace-checkbox-2" type="checkbox" name="serviceContent"
+                                               id="serviceContent$!{content.attrId}" value="$!{content.attrId}"/>
+                                        <span class='lbl'>$!{content.attrValue}</span>
+                                    </label>
+                                #end
+                            ##                                <div class="col-xs-2">
+                                <label>
+                                    <input class="ace ace-checkbox-2" name="serviceContent" type="checkbox"
+                                           id="serviceContent_1" value="-1"/>
+                                    <span class='lbl'>其他</span>
+                                </label>
+                                <input class="hidden" id="serviceOtherContent" name="serviceOtherContent"
+                                       value="$!{maintenance.serviceOtherContent}">
+                            ##                                </div>
+                                <input type="hidden" id="serviceContent" value="$!{maintenance.serviceContent}">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="engineerSuggest">
+                                服务人员建议:</label>
+
+                            <div class="col-xs-10">
+                    <textarea id="engineerSuggest" name="engineerSuggest"
+                              class="col-xs-12 ui-autocomplete-input">$!{maintenance.engineerSuggest}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="note">备注:</label>
+
+                            <div class="col-xs-10">
+                                <textarea id="note" name="note"
+                                          class="col-xs-12 ui-autocomplete-input">$!{maintenance.note}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="serviceFees">
+                                服务费用:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="serviceFees" name="serviceFees"
+                                       value="$!{maintenance.serviceFees}"
+                                       class="col-xs-11 ui-autocomplete-input" placeholder="请输入服务费用"
+                                       onkeyup="value=value.replace(/[^\d.]/g,'')"/><span>元</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="cView">
+                                用户意见:</label>
+
+                            <div class="col-xs-10">
+                    <textarea id="cView" name="cView"
+                              class="col-xs-12 ui-autocomplete-input">$!{maintenance.cView}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12">
+                            <label class="col-xs-2 control-label no-padding-right" for="picIds"> 照片:</label>
+
+                            <div class="col-xs-10">
+                                 <span id="picSpan" name="picSpan" class="col-xs-7"
+                                       style="border: 1px solid silver;height: 34px;padding-top: 6px;"></span>
+                                <button type="button" id="picBtn" class="btn btn-white btn-info"
+                                        name="picBtn">选择照片
+                                </button>
+                                <span id="picMsg"></span>
+
+                                <div id="picBar" name="picBar" class="col-xs-12"></div>
+                                <div id="picContant" name="picContant"></div>
+                                <input type="hidden" id="picIds" name="picIds" value="$!{maintenance.picIds}">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="serviceEngineer"><a
+                                    class="red">*</a> 服务工程师:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" id="serviceEngineer" value="$!{maintenance.serviceEngineer}"
+                                       name="serviceEngineer"
+                                       class="col-xs-12 ui-autocomplete-input"
+                                       placeholder="请选择服务工程师"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="col-xs-4 control-label no-padding-right" for="serviceDate"><a
+                                    class="red">*</a> 服务日期:</label>
+
+                            <div class="col-xs-8">
+                                <input type="text" class="col-xs-12 ui-autocomplete-input" placeholder="请选择服务日期"
+                                       id="serviceDate"
+                                       name="serviceDate" value="$!{maintenance.formatServiceDate}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12 clearfix form-actions align-right">
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit-btn" name="submit-btn">
+                                保存
+                            </button>
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-white btn-info " type="button"
+                                    onclick="javaScript:window.history.go(-1)" id="closeAdd">
+                                返回
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/plug-in/sys/user/listuser.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/listhostnum.js?_dc=$!{staticVersion}"></script>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/server/maintenance/add.js?_dc=$!{staticVersion}"></script>
+#parse("/cms/common/fileupload.vm")

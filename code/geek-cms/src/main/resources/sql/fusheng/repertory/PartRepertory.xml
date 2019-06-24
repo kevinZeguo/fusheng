@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.PartRepertoryDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="p_id" property="pId" jdbcType="INTEGER"/>
+        <result column="storage_id" property="storageId" jdbcType="VARCHAR"/>
+        <result column="stock_num" property="stockNum" jdbcType="INTEGER"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, code, p_id, storage_id, stock_num, creator, created, modifier,modified, deleted
+    </sql>
+    <select id="selectById" resultType="PartRepertory" parameterType="java.lang.Integer">
+        select
+        <include refid="rep_col"/>
+        , tp.p_code pCode,tp.p_name pName,av.attr_value storageName
+        from tb_part_repertory pr
+        left join tb_part tp on pr.p_id = tp.p_id
+        left join sys_attr_value av on pr.storage_id =av.attr_id
+        where pr.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertory">
+        <selectKey keyProperty="id" resultType="Integer">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+        insert into tb_part_repertory (code, p_id, storage_id,
+        stock_num, creator, created,modifier, modified, deleted)
+        values (#{code,jdbcType=VARCHAR}, #{pId,jdbcType=INTEGER}, #{storageId,jdbcType=VARCHAR}, #{stockNum},
+        #{creator,jdbcType=INTEGER}, now(),#{modifier,jdbcType=INTEGER}, now(), 0)
+    </insert>
+
+
+    <update id="updateByStockNum" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.PartRepertory">
+        update tb_part_repertory
+        set stock_num = #{stockNum,jdbcType=INTEGER},
+        modifier = #{modifier,jdbcType=INTEGER},
+        modified =now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="selectByRepIdAndPid" resultType="PartRepertory">
+        select
+        <include refid="rep_col"/>
+        from tb_part_repertory pr
+        where pr.deleted = 0
+        and pr.storage_id = #{storageId,jdbcType=VARCHAR}
+        and pr.p_id = #{pId,jdbcType=VARCHAR}
+    </select>
+    <sql id="rep_col">
+            pr.id id, pr.code code, pr.p_id pId, pr.storage_id storageId, pr.stock_num stockNum,
+            pr.creator creator, pr.created created, pr.modifier modifier,pr.modified modified, pr.deleted deleted
+        </sql>
+
+    <select id="selectCountByPage" resultType="int" parameterType="RepertoryQueryParam">
+        select
+        count(1)
+        from tb_part_repertory pr
+        left join tb_part tp on pr.p_id = tp.p_id
+        left join sys_attr_value av on pr.storage_id = av.attr_id
+        left join sys_attr_group ag on ag.attr_group_id = av.attr_group_id
+        where pr.deleted = 0
+        and tp.deleted = 0
+        and av.deleted = 0
+        and ag.group_code = 'part.stock.storagelist'
+        <if test="pId != null and pId != ''">
+            and pr.pId = #{pId}
+        </if>
+        <if test="partCode != null and partCode != ''">
+            and tp.p_code like #{partCode}
+        </if>
+        <if test="partName != null and partName != ''">
+            and tp.p_name like #{partName}
+        </if>
+        <if test="storageId != null and storageId != ''">
+            and pr.storage_id = #{storageId}
+        </if>
+    </select>
+
+
+    <select id="selectListByPage" resultType="PartRepertory" parameterType="RepertoryQueryParam">
+        select
+        <include refid="rep_col"/>
+        , tp.p_code pCode,tp.p_name pName,av.attr_value storageName,u.real_name
+        modifierName,DATE_FORMAT(pr.modified,'%Y-%m-%d') modifiedStr
+        from tb_part_repertory pr
+        left join tb_part tp on pr.p_id = tp.p_id
+        left join sys_attr_value av on pr.storage_id =av.attr_id
+        left join sys_user u on u.user_id = pr.modifier
+        where pr.deleted = 0
+        and tp.deleted = 0
+        and av.deleted = 0
+        <if test="pId != null and pId != ''">
+            and pr.p_id = #{pId}
+        </if>
+        <if test="partCode != null and partCode != ''">
+            and tp.p_code like #{partCode}
+        </if>
+        <if test="partName != null and partName != ''">
+            and tp.p_name like #{partName}
+        </if>
+        <if test="storageId != null and storageId != ''">
+            and pr.storage_id = #{storageId}
+        </if>
+        group by pr.id
+        order by pr.id
+        limit #{start} , #{limit}
+    </select>
+
+    <select id="selectRepertoryDetail" resultType="PartRepertory" parameterType="int">
+        select
+        <include refid="rep_col"/>
+        , tp.p_code pCode,tp.p_name pName,av.attr_value storageName
+        from tb_part_repertory pr
+        left join tb_part tp on pr.p_id = tp.p_id
+        left join sys_attr_value av on pr.storage_id = av.attr_id
+        where pr.deleted = 0
+        and tp.deleted = 0
+        and av.deleted = 0
+        and pr.id = #{id}
+    </select>
+
+
+</mapper>

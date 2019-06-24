@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.TbPartStockListDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.repertory.TbPartStockList">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="p_id" property="pId" jdbcType="INTEGER"/>
+        <result column="p_code" property="pCode" jdbcType="VARCHAR"/>
+        <result column="p_name" property="pName" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="num" property="num" jdbcType="DOUBLE"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+
+        <result column="formatDateIn" property="formatDateIn" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, code, p_id, p_code, p_name, price, num, operator, note, creator, created, modifier, 
+    modified, deleted
+  </sql>
+    <select id="selectById" resultType="TbIntoStockBill" parameterType="java.lang.Integer">
+        select
+        <include refid="in_col"/>
+        from tb_into_stock_bill a
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_into_stock_bill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.TbIntoStockBill">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_into_stock_bill (code, p_id, p_code,
+        p_name, price, num, operator,
+        note, creator, created,modifier, modified, deleted,status)
+        values (#{code,jdbcType=VARCHAR}, #{pId,jdbcType=INTEGER}, #{pCode,jdbcType=VARCHAR},
+        #{pName,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{num,jdbcType=DOUBLE}, #{operator,jdbcType=VARCHAR},
+        #{note,jdbcType=VARCHAR}, #{creator,jdbcType=INTEGER}, now(),
+        #{modifier,jdbcType=INTEGER}, now(), 0,#{status})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.TbIntoStockBill">
+    update tb_into_stock_bill
+    set code = #{code,jdbcType=VARCHAR},
+      p_id = #{pId,jdbcType=INTEGER},
+      p_code = #{pCode,jdbcType=VARCHAR},
+      p_name = #{pName,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      num = #{num,jdbcType=DOUBLE},
+      operator = #{operator,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=INTEGER},
+      created = #{created,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = #{modified,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryInDetailCountByPage" resultType="int" parameterType="RepertoryQueryParam">
+        select count(1) from tb_into_stock_bill a
+        where a.deleted = 0
+        <if test="inCode != null and inCode != ''">
+            and code like #{inCode}
+        </if>
+        <if test="partCode != null and partCode != ''">
+            and p_code like #{partCode}
+        </if>
+        <if test="partName != null and partName != ''">
+            and p_name like #{partName}
+        </if>
+        <if test="inDate != null and inDate != ''">
+            and DATE_FORMAT(created,'%Y-%m-%d')= #{inDate}
+        </if>
+    </select>
+
+    <sql id="in_col">
+        a.id id,a.code code,
+      a.p_id pId ,a.p_code pCode ,a.p_name pName ,a.price price ,a.num num ,a.operator operator ,a.note note ,
+      a.creator creator ,a.created created ,a.modifier modifier ,a.modified modified ,a.deleted deleted
+    </sql>
+    <select id="queryInDetailListByPage" resultType="TbIntoStockBill" parameterType="RepertoryQueryParam">
+        select
+        <include refid="in_col"/>,DATE_FORMAT(a.created,'%Y-%m-%d') formatDateIn,a.status,
+        u.real_name creatorName
+        from tb_into_stock_bill a
+        left join sys_user u on a.creator = u.user_id and u.deleted = 0
+        where a.deleted = 0
+        <if test="inCode != null and inCode != ''">
+            and a.code like #{inCode}
+        </if>
+        <if test="partCode != null and partCode != ''">
+            and a.p_code like #{partCode}
+        </if>
+        <if test="partName != null and partName != ''">
+            and a.p_name like #{partName}
+        </if>
+        <if test="inDate != null and inDate != ''">
+            and DATE_FORMAT(a.created,'%Y-%m-%d')= #{inDate}
+        </if>
+    </select>
+
+    <update id="updateStatus" parameterType="com.beijing.geek.cms.fusheng.domain.repertory.TbIntoStockBill">
+        update tb_into_stock_bill
+        set status = #{status,jdbcType=VARCHAR},
+        modifier = #{modifier,jdbcType=INTEGER},
+        modified =now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>

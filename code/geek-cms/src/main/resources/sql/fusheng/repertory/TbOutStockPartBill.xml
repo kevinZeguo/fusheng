@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.repertory.TbOutStockPartBillDao">
+    <sql id="out_col">
+        od.id as id, od.osb_id as osbId , od.p_id as pId, od.p_code as pCode, od.p_name as pName,
+         od.supplier as supplier, od.price as price, od.num as num, od.unit as unit, od.tax_amt as taxAmt,
+         od.total_amt as  totalAmt, od.note as note , od.creator as creator,DATE_FORMAT(od.created,'%Y-%m-%d') as createdStr, od.modifier as modifier,
+          od.modified as modified, od.deleted as deleted
+    </sql>
+
+    <select id="selectOutDetailCountByPage" parameterType="RepertoryQueryParam" resultType="int">
+      select count(1) from tb_out_stock_part_bill od
+        left join tb_out_stock_bill ob on od.osb_id = ob.id and ob.deleted = 0
+        left join tb_contract tc on tc.id = ob.co_id and tc.deleted = 0
+        where od.deleted = 0
+         and ob.c_id = #{cId}
+    </select>
+
+    <select id="selectOutDetailListByPage" parameterType="RepertoryQueryParam" resultType="TbOutStockPartBill">
+        select
+        <include refid="out_col"/>
+        , tc.a_code coACode, tc.b_code coBCode,ob.co_id coId
+        from tb_out_stock_part_bill od
+        left join tb_out_stock_bill ob on od.osb_id = ob.id and ob.deleted = 0
+        left join tb_contract tc on tc.id = ob.co_id and tc.deleted = 0
+        where od.deleted = 0
+        and ob.c_id = #{cId}
+    </select>
+
+</mapper>

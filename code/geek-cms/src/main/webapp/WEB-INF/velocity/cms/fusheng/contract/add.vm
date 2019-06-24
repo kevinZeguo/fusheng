@@ -1,0 +1,168 @@
+#set($page_title=" 合同管理")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<form class="form-horizontal" id="contractForm" role="form">
+	<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">合同管理<span style="font-size: 12px">>>
+	             #if($add == "add")
+	                	新增合同
+	            #else
+	                	编辑合同
+	            #end
+        	</span></h4>
+    </div>    
+    <div class="modal-body">
+        <fieldset>
+            <input type="hidden" id="id" name="id" value="$!{contract.id}">
+            <input type="hidden" id="fileIds" name="fileIds" value="$!{contract.fileIds}">
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="customerId"><a class="red">*</a> 客户名称:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="customerId" name="customerId"
+                           class="col-xs-8 ui-autocomplete-input" value="$!{customerId}" #if($customerId) disabled #end
+                           placeholder="请选择客户"/>
+                </div>
+            </div>
+			<div class="form-group col-xs-12">
+				<label class="col-xs-4 control-label no-padding-right" for="aCode"><a class="red">*</a> 合同编号(甲方):</label>
+				<div class="col-xs-8">
+					<input type="text" id="aCode" name="aCode" value="$!{contract.aCode}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入合同编号" />
+				</div>
+			</div>
+ 			<div class="form-group col-xs-12">
+				<label class="col-xs-4 control-label no-padding-right" for="bCode"> 合同编号(乙方):</label>
+				<div class="col-xs-8">
+					<input type="text" id="bCode" name="bCode" value="$!{contract.bCode}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入合同编号" />
+				</div>
+			</div> 
+			<div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="type"><a class="red">*</a> 合同类型:</label>
+                <div class="col-xs-8">
+                    <select id="type" name="type" class="col-xs-8" value="$!{contract.type}">
+                    	<option value="-1">--请选择--</option>
+                    	<option value="0" #if($!{contract.type}==0) selected="selected" #end>销售合同</option>
+                    	<option value="1" #if($!{contract.type}==1) selected="selected" #end>采购合同</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="price">  价格:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="price" name="price" value="$!{contract.price}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入价格" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="isCashBack"> 是否已回款:</label>
+                <div id="addIsCashBack" class="col-xs-6">
+                	#if($!{add}=='add')
+					<label class="col-xs-3"><input type="radio" id="unBack" name="isCashBack" value="0" checked="checked" />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+					<label class="col-xs-3"><input type="radio" id="Backed" name="isCashBack" value="1" />是</label>
+                	#end
+                	#if($!{add}=='edit')
+                		<label class="col-xs-3"><input type="radio" id="unBacked" name="isCashBack" value="0" #if($!{contract.isCashBack}==0) checked="checked" #end />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label class="col-xs-3"><input type="radio" id="Backed" name="isCashBack" value="1" #if($!{contract.isCashBack}==1) checked="checked" #end />是</label>              			
+                	#end
+                </div>
+            </div>
+            <div id="addCashBackDate" class="form-group col-xs-12" #if($!{contract.isCashBack}==1) style="display:block" #else style="display:none" #end>
+            	<label class="col-xs-4 control-label no-padding-right" for="cashBackDate"> 回款日期:</label>
+               	<div class="col-xs-8">
+                    <input type="text" id="cashBackDate" name="cashBackDate" value="$!{contract.cashBackDateFormat}" class="col-xs-8 ui-autocomplete-input" placeholder="请选择回款日期"/>
+                </div>           
+            </div>
+            <div id="addCashBackPrice" class="form-group col-xs-12"#if($!{contract.isCashBack}==1) style="display:block" #else style="display:none" #end>
+            	<label class="col-xs-4 control-label no-padding-right" for="cashBackPrice"> 回款金额:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="cashBackPrice" name="cashBackPrice" value="$!{contract.cashBackPrice}" class="col-xs-8 ui-autocomplete-input" placeholder="请输入回款金额" onkeyup="value=value.replace(/[^\d.]/g,'')"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="isSendGoods"> 是否已发货:</label>
+                <div class="col-xs-6">
+                	#if($!{add}=='add')
+					<label class="col-xs-3"><input type="radio" id="unSend" name="isSendGoods" value="0" checked="checked" />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+					<label class="col-xs-3"><input type="radio" id="Sended" name="isSendGoods" value="1" />是</label>
+                	#end
+                	#if($!{add}=='edit')
+                		<label class="col-xs-3"><input type="radio" id="unSend" name="isSendGoods" value="0" #if($!{contract.isSendGoods}==0) checked="checked" #end />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label class="col-xs-3"><input type="radio" id="Sended" name="isSendGoods" value="1" #if($!{contract.isSendGoods}==1) checked="checked" #end />是</label>              			
+                	#end
+                </div>
+            </div>
+            <div id="addSendGoodsDate" class="form-group col-xs-12" #if($!{contract.isSendGoods}==1) style="display:block" #else style="display:none" #end>
+            	<label class="col-xs-4 control-label no-padding-right" for="sendGoodsDate"> 发货日期:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="sendGoodsDate" name="sendGoodsDate" value="$!{contract.sendGoodsDateFormat}" class="col-xs-8 ui-autocomplete-input" placeholder="请选择发货日期"/>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="isOpenInvoice"> 是否已开发票:</label>
+                <div class="col-xs-6">
+                	#if($!{add}=='add')
+					<label class="col-xs-3"><input type="radio" id="unOpen" name="isOpenInvoice" value="0" checked="checked" />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+					<label class="col-xs-3"><input type="radio" id="Opened" name="isOpenInvoice" value="1" />是</label>
+                	#end
+                	#if($!{add}=='edit')
+                		<label class="col-xs-3"><input type="radio" id="unOpen" name="isOpenInvoice" value="0" #if($!{contract.isOpenInvoice}==0) checked="checked" #end />否</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label class="col-xs-3"><input type="radio" id="Opened" name="isOpenInvoice" value="1" #if($!{contract.isOpenInvoice}==1) checked="checked" #end />是</label>              			
+                	#end
+                </div>
+            </div>
+            <div id="addOpenInvoiceDate" class="form-group col-xs-12"#if($!{contract.isOpenInvoice}==1) style="display:block" #else style="display:none" #end>
+            	<label class="col-xs-4 control-label no-padding-right" for="openInvoiceDate"> 开票日期:</label>
+                <div class="col-xs-8">
+                    <input type="text" id="openInvoiceDate" name="openInvoiceDate" value="$!{contract.openInvoiceDateFormat}" class="col-xs-8 ui-autocomplete-input" placeholder="请选择开票日期"/>
+                </div>            
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="note">备注:</label>
+                <div class="col-xs-8">
+                <textarea id="note" name="note" class="col-xs-8 ui-autocomplete-input">$!{contract.note}</textarea>
+                </div>
+            </div>             
+            <div class="form-group col-xs-12">
+                <label class="col-xs-4 control-label no-padding-right" for="contractFile">上传合同文件:</label>
+                <div class="col-xs-8">
+ 					<span id="picSpan" name="picSpan" class="col-xs-6"
+                          style="border: 1px solid silver;height: 34px;padding-top: 6px;">
+                    	请选择文件
+                    </span>
+                    <button type="button" id="cFileBtn" class="btn btn-white btn-info col-xs-2" name="cFileBtn">上传</button>
+                    <span id="picMsg"></span>
+                    <!--<div id="picBar" name="picBar" class="col-xs-12"></div>-->
+					<div id="picContant" name="picContant"></div>
+                    <input type="hidden" id="contractFile" name="contractFile" value="$!{contract.contractFileId}">               
+                
+					<!--<p class="upload-file col-xs-8">-->
+						<!--<span class="file-content">请选择文件</span>-->
+                            <!--<span class="btn btn-white btn-default">-->
+                                <!--<input type="file" id="addUpFile" name="addUpFile">-->
+                            <!--<span id="addUpFileInfo">选择文件</span>-->
+						<!--</span>-->
+                    <!--</p>-->
+                </div>
+                <!--<div class="col-xs-12  text-center">-->
+                    <!--<p><span style="color: red" id="addUpFileTips"></span></p>-->
+                <!--</div>-->				
+            </div>           
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="submit" id="submit-btn" name="submit-btn">
+            保存
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-white btn-info " type="button" id="closeModal">
+            取消
+        </button>
+    </div>
+</form>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/contract/add.js?_dc=$!{staticVersion}"></script>
+
+#parse("/cms/common/fileupload.vm")
+

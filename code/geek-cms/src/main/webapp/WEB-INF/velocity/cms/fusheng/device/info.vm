@@ -1,0 +1,363 @@
+#set($page_title=" 设备详情")
+#set($selected_menu_id='menu_task_center_index')
+
+##<style>
+##    td {
+##        font-family: simsun;
+##        font-size: 14px;
+##    }
+##</style>
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+    ##        <script type="text/javascript">
+    ##            try {
+    ##                ace.settings.check('breadcrumbs', 'fixed')
+    ##            } catch (e) {
+    ##            }
+    ##        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="/device/index.html">设备管理</a>
+            </li>
+            <li class="active">设备详情</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+        <form class="form-horizontal form-inline" id="data-form">
+            <input type="hidden" id="eId" name="eId" value="$!{tbEquipment.eId}"/>
+            <input type="hidden" id="fileIds" name="fileIds" value="$!{tbEquipment.fileIds}"/>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5  control-label"> 客户名称:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="cCode">$!{tbEquipment.cName}</span>
+                </div>
+            </div>
+        ##            <div class="form-group col-xs-6">
+        ##                <label class="col-xs-5  control-label"> 设备编码:
+        ##                </label>
+        ##
+        ##                <div class="col-xs-7">
+        ##                    <span id="cName">$!{tbEquipment.eCode}</span>
+        ##                </div>
+        ##            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 设备机型:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="address">$!{tbEquipment.eModel}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 制造号码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="contact">$!{tbEquipment.makeNum}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 制造日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="contact">$!{tbEquipment.makeDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 原主机号码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="phone">$!{tbEquipment.oldHostNum}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 现主机号码:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="payAcct">$!{tbEquipment.hostNum}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机厂牌:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="taxNum">$!{tbEquipment.motorBrand}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电控盘型号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="serviceEngineerName">$!{tbEquipment.elecPanModel}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机出厂编号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="machineryNumber">$!{tbEquipment.machineryNumber}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机型号:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="serviceEngineerName">$!{tbEquipment.motorModel}</span>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 电机制造日期:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="fax">$!{tbEquipment.formatDate}</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 是否定期巡检:
+                </label>
+
+                <div class="col-xs-7">
+                    <span>#if($!{tbEquipment.regularCheck} == 1)是 #else 否#end</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 巡检周期:
+                </label>
+
+                <div class="col-xs-7">
+                            <span>#if($!{tbEquipment.regularCheck} == 1)
+                                $!{tbEquipment.checkMonths}个月
+                            #else
+                                --
+                            #end</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 照片:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="ePicId"></span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="col-xs-5 control-label"> 备注:
+                </label>
+
+                <div class="col-xs-7">
+                    <span id="postCode">$!{tbEquipment.note}</span>
+                </div>
+            </div>
+        </form>
+        ##        设备及配件记录
+            <div class="row col-xs-12" style="margin-top: 10px">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs" id="myTab">
+
+                        <input id="eIdA" name="eIdA" type="hidden" value="$!{tbEquipment.eId}">
+                        <input id="customerIdA" name="customerIdA" type="hidden" value="$!{tbEquipment.customerId}">
+                        <li class="active toggle-record">
+                            <a data-toggle="tab" href="#maintenanceDiv" id="toggle-maintenance">
+                            ##                            <i class="green ace-icon fa fa-home bigger-120"></i>
+                                维保记录
+                            </a>
+                        </li>
+                        <li class="toggle-record">
+                            <a data-toggle="tab" href="#pollingDiv" id="toggle-polling">
+                                巡检记录
+                            </a>
+                        </li>
+                        <li class="toggle-record">
+                            <a data-toggle="tab" href="#debugDiv" id="toggle-debug">
+                                调试记录
+                            </a>
+                        </li>
+                        <li class="toggle-record">
+                            <a data-toggle="tab" href="#partDiv" id="toggle-part">配件信息
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" style="width: 104% !important;margin-top: 35px;">
+                        <div id="maintenanceDiv" class="tab-pane fade in active">
+                            <div style="margin-left: 10px;margin-bottom: 5px">
+                                <button type="button" class="btn btn-success button btn-sm" id="addMain"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>录入
+                                </button>
+                            </div>
+                            <div class="col-xl-12">
+                                <table id="maintenace-grid-table"></table>
+                                <div id="maintenace-grid-pager"></div>
+                            </div>
+                        </div>
+
+                        <div id="pollingDiv" class="tab-pane fade ">
+                            <div style="margin-left: 10px;margin-bottom: 5px">
+                                <button type="button" class="btn btn-success button btn-sm" id="addPolling"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>录入
+                                </button>
+                            </div>
+                            <div class="col-xl-12">
+                                <table id="polling-grid-table"></table>
+                                <div id="polling-grid-pager"></div>
+                            </div>
+                        </div>
+
+                        <div id="debugDiv" class="tab-pane fade ">
+                            <div style="margin-left: 10px;margin-bottom: 5px">
+                                <button type="button" class="btn btn-success button btn-sm" id="addDebug"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>录入
+                                </button>
+                            </div>
+                            <div class="col-xl-12">
+                                <table id="debug-grid-table"></table>
+                                <div id="debug-grid-pager"></div>
+                            </div>
+                        </div>
+
+
+                        <div id="partDiv" class="tab-pane fade ">
+                            <div style="margin-left: 10px;margin-bottom: 5px">
+                                <button type="button" class="btn btn-success button btn-sm" id="addPart"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>新增
+                                </button>
+                                <button type="button" class="btn btn-grey button btn-sm" id="deletePart"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>删除
+                                </button>
+                                <button type="button" class="btn btn-success button btn-sm hidden" id="addPartBatch"
+                                        style="height: 32px">
+                                    <i class="icon-plus"></i>批量导入
+                                </button>
+                            </div>
+                            <div class="col-xl-12">
+                                <table id="part-grid-table"></table>
+                                <div id="part-grid-pager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <input id="eqIdQ" name="eqIdQ" value="$!{tbEquipment.eId}" type="hidden">
+    <input id="queryCId" name="queryCId" value="$!{tbEquipment.customerId}">
+    <input type="hidden" id="serviceEngineerQ" name="serviceEngineerQ">
+    <input id="serviceEngineer" name="serviceEngineer">
+    <input type="hidden" id="startDate" name="startDate">
+    <input type="hidden" id="dKeyQ" name="dKeyQ">
+    <input type="hidden" id="endDate" name="endDate">
+</div>
+
+
+#define($javascriptBlock)
+<script src="/plug-in/sys/user/listuser.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/customer/listcustomer.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/listhostnum.js?_dc=$!{staticVersion}"></script>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/server/debugeq/list.js"></script>
+<script src="/plug-in/fusheng/server/maintenance/list.js"></script>
+<script src="/plug-in/fusheng/server/polling/list.js"></script>
+<script src="/plug-in/fusheng/device/addPart.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/device/info.js?_dc=$!{staticVersion}"></script>
+#end
+
+<div class="modal fade cms-modal" id="maintenanceInfoModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content maintenance-info-body">
+    </div>
+</div>
+
+<!--infoModal-->
+<div class="modal fade cms-modal" id="pollingInfoModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content polling-info-body">
+    </div>
+</div>
+
+<div class="modal fade cms-modal" id="debugInfoModal" role="dialog" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; padding-left: 0px;">
+    <div class="modal-content debug-info-body">
+    </div>
+</div>
+
+
+<div class="modal fade cms-modal" id="addPartModal" role="dialog" aria-hidden="true" data-backdrop="static"
+     style="overflow-y: hidden;width: 800px;height: 510px;">
+    <div class="modal-content batch-customer-body">
+    ##        <form class="form-horizontal" id="addPartForm" role="form">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" style="font-size: 22px">×</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">选择配件</h4>
+        </div>
+        <div class="modal-body">
+            <fieldset>
+
+                <div class="seach-bar">
+                    <div class="row">
+                        <div class="col-xs-4 search-condition">
+                            <label class="col-xs-4 control-label no-padding-right" for="customerId">* 配件关键字:</label>
+                            <div class="col-xs-8">
+                                <input type="text" id="pKeys" name="pKeys"
+                                       class="col-xs-9 ui-autocomplete-input" placeholder="请输入关键字"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 search-condition">
+                            <button class="btn btn-primary btn-search btn-sm" type="button" id="queryPartBtn">
+                                <i class="icon-search"></i>搜索
+                            </button>
+                            &nbsp;&nbsp;
+                            <a href="/part/index.html" target="_blank">添加配件</a>
+                        </div>
+                    </div>
+                    <div class="row col-xs-12 tab-border">
+                        <table id="select-part-grid-table" style="width: 1100px"></table>
+                        <div id="select-part-grid-pager" style="width: 1100px"></div>
+                    </div>
+                    <div class="row col-xs-12 hidden" id="selectPartTips">
+                        <span id="" style="color: red">请选择配件后，再保存！</span>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-primary" type="button" id="save-part-btn"
+                    name="save-device-batch-btn">
+                保存
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn btn-white btn-info " type="button" id="close-add-part">
+                关闭
+            </button>
+        </div>
+    ##        </form>
+    </div>
+</div>
+
+#parse("/cms/common/fileupload.vm")

@@ -1,0 +1,80 @@
+#set($page_title="库存管理")
+#set($selected_menu_id='menu_task_center_index')
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="/index.html">首页</a>
+            </li>
+            <li>
+                <a href="#">出入库管理</a>
+            </li>
+            <li class="active">库存管理</li>
+        </ul>
+        <!-- /.breadcrumb -->
+        <!-- /section:basics/content.searchbox -->
+    </div>
+    <div class="page-content">
+
+        <style>
+            .search-condition {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="seach-bar">
+            <div class="row">
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">配件编号</span>
+                        <input type="text" id="pCodeQ" name="pCodeQ" placeholder="请输入配件编号"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">配件名称</span>
+                        <input type="text" id="pNameQ" name="pNameQ" placeholder="请输入配件名称"
+                               class="form-control form-cnd">
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <div class="input-group col-xs-11">
+                        <span class="input-group-addon" style="width: 100px">仓库</span>
+
+                        <div class="col-xs-9">
+                            <select id="storageIdQ" name="storageIdQ" style="margin-left: -12px;min-width: 200px"
+                                    class="form-control form-cnd">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-4 search-condition">
+                    <button class="btn btn-primary btn-search btn-sm" type="button" id="queryBtn">
+                        <i class="icon-search"></i>搜索
+                    </button>
+##                    <button type="button" class="btn btn-success button btn-sm" id="inBtn" style="height: 32px">
+##                        <i class="icon-plus"></i>入库
+##                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-xs-12 tab-border">
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+        </div>
+    </div>
+</div>
+
+#define($javascriptBlock)
+<script src="/plug-in/sys/attr/listAttr.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/repertory/list.js?_dc=$!{staticVersion}"></script>
+#end

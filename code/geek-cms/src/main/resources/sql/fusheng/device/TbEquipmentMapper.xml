@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beijing.geek.cms.fusheng.dao.device.TbEquipmentDao">
+    <resultMap id="BaseResultMap" type="com.beijing.geek.cms.fusheng.domain.device.TbEquipment">
+        <id column="e_id" property="eId" jdbcType="INTEGER"/>
+        <result column="e_code" property="eCode" jdbcType="VARCHAR"/>
+        <result column="e_name" property="eName" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="e_model" property="eModel" jdbcType="VARCHAR"/>
+        <result column="motor_brand" property="motorBrand" jdbcType="VARCHAR"/>
+        <result column="make_num" property="makeNum" jdbcType="VARCHAR"/>
+        <result column="host_num" property="hostNum" jdbcType="VARCHAR"/>
+        <result column="elec_pan_model" property="elecPanModel" jdbcType="VARCHAR"/>
+        <result column="machinery_number" property="machineryNumber" jdbcType="VARCHAR"/>
+        <result column="motor_model" property="motorModel" jdbcType="VARCHAR"/>
+        <result column="motor_make_date" property="motorMakeDate" jdbcType="DATE"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="INTEGER"/>
+        <result column="modified" property="modified" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="formatDate" property="formatDate" jdbcType="VARCHAR"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="cName" property="cName" jdbcType="VARCHAR"/>
+        <result column="make_date" property="makeDate" jdbcType="VARCHAR"/>
+        <result column="debug_date" property="debugDate" jdbcType="DATE"/>
+        <result column="regular_check" property="regularCheck" jdbcType="INTEGER"/>
+        <result column="check_months" property="checkMonths" jdbcType="INTEGER"/>
+        <result column="old_host_num" property="oldHostNum" jdbcType="VARCHAR"/>
+        <result column="file_ids" property="fileIds" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    e_id, e_code, e_name, customer_id, e_model, motor_brand, make_num, elec_pan_model,host_num,make_date,
+    machinery_number machineryNumber,motor_model motorModel, motor_make_date, creator, created, modifier, modified,
+     deleted,note,debug_date,regular_check,check_months,old_host_num,file_ids
+  </sql>
+    <select id="selectById" resultType="TbEquipment" parameterType="java.lang.Integer">
+        select
+        <include refid="device_col"/>,DATE_FORMAT(motor_make_date,'%Y-%m-%d')
+        formatDate,DATE_FORMAT(debug_date,'%Y-%m-%d') formatDebugDate,b.c_name cName,b.c_code cCode,
+        b.contact contact,b.phone,b.address address,b.tax_num taxNum,
+        b.post_code postCode,b.service_engineer serviceEngineer , su.real_name serviceEngineerName
+        from tb_equipment a
+        left join tb_customer b on a.customer_id = b.c_id and b.deleted = 0
+        left join sys_user su on su.user_id = b.service_engineer
+        where e_id = #{eId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update tb_equipment
+    set deleted = 1
+    where e_id = #{eId,jdbcType=INTEGER} 
+  </delete>
+    <insert id="insert" parameterType="com.beijing.geek.cms.fusheng.domain.device.TbEquipment">
+        <selectKey resultType="java.lang.Integer" keyProperty="eId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tb_equipment (e_code, e_name, customer_id,e_model, motor_brand, make_num,host_num,
+        elec_pan_model, motor_make_date, creator,created, modifier, modified,file_ids,
+        deleted,note,debug_date,regular_check,check_months,old_host_num,make_date,machinery_number,motor_model)
+        values (#{eCode,jdbcType=VARCHAR}, #{eName,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER},
+        #{eModel,jdbcType=VARCHAR}, #{motorBrand,jdbcType=VARCHAR}, #{makeNum,jdbcType=VARCHAR},
+        #{hostNum,jdbcType=VARCHAR},
+        #{elecPanModel,jdbcType=VARCHAR}, #{motorMakeDate,jdbcType=DATE}, #{creator,jdbcType=INTEGER},
+        now(), #{modifier,jdbcType=INTEGER}, now(),#{fileIds},
+        0,#{note,jdbcType=VARCHAR},#{debugDate,jdbcType=DATE},#{regularCheck,jdbcType=INTEGER},
+        #{checkMonths,jdbcType=INTEGER},#{oldHostNum,jdbcType=VARCHAR},#{makeDate},#{machineryNumber},#{motorModel})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.beijing.geek.cms.fusheng.domain.device.TbEquipment">
+        update tb_equipment
+        <set>
+            <if test="eName != null">
+                e_name = #{eName,jdbcType=VARCHAR},
+            </if>
+            <if test="eModel != null">
+                e_model = #{eModel,jdbcType=VARCHAR},
+            </if>
+            <if test="motorBrand != null">
+                motor_brand = #{motorBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="makeNum != null">
+                make_num = #{makeNum,jdbcType=VARCHAR},
+            </if>
+            <if test="elecPanModel != null">
+                elec_pan_model = #{elecPanModel,jdbcType=VARCHAR},
+            </if>
+            <if test="motorMakeDate != null">
+                motor_make_date = #{motorMakeDate,jdbcType=DATE},
+            </if>
+            <if test="modifier != null">
+                modifier = #{modifier,jdbcType=INTEGER},
+            </if>
+            <if test="hostNum != null">
+                host_num = #{hostNum,jdbcType=VARCHAR},
+            </if>
+            <if test="note != null">
+                note = #{note,jdbcType=VARCHAR},
+            </if>
+            <if test="debugDate != null">
+                debug_date = #{debugDate,jdbcType=DATE},
+            </if>
+            <if test="regularCheck != null">
+                regular_check = #{regularCheck,jdbcType=INTEGER},
+            </if>
+            <if test="checkMonths != null">
+                check_months = #{checkMonths,jdbcType=INTEGER},
+            </if>
+            <if test="oldHostNum != null">
+                old_host_num = #{oldHostNum,jdbcType=VARCHAR},
+            </if>
+            <if test="makeDate != null">
+                make_date = #{makeDate,jdbcType=VARCHAR},
+            </if>
+            modified = now()
+        </set>
+        where e_id = #{eId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.beijing.geek.cms.fusheng.domain.device.TbEquipment">
+    update tb_equipment
+    set e_code = #{eCode,jdbcType=VARCHAR},
+      e_name = #{eName,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      e_model = #{eModel,jdbcType=VARCHAR},
+      motor_brand = #{motorBrand,jdbcType=VARCHAR},
+      make_num = #{makeNum,jdbcType=VARCHAR},
+      host_num = #{hostNum,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      elec_pan_model = #{elecPanModel,jdbcType=VARCHAR},
+      motor_make_date = #{motorMakeDate,jdbcType=DATE},
+      machinery_number=#{machineryNumber},
+      motor_model=#{motorModel},
+      creator = #{creator,jdbcType=INTEGER},
+      created = #{created,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=INTEGER},
+      modified = #{modified,jdbcType=TIMESTAMP},
+      debug_date = #{debugDate,jdbcType=DATE},
+      regular_check = #{regularCheck,jdbcType=INTEGER}
+      check_months = #{checkMonths,jdbcType=INTEGER}
+      old_host_num = #{oldHostNum,jdbcType=VARCHAR},
+      file_ids = #{fileIds,jdbcType=VARCHAR}
+    where e_id = #{eId,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectDeviceCountByPage" resultType="int" parameterType="DeviceQueryParam">
+        select count(1) from tb_equipment a
+        left join tb_customer tc on tc.c_id = a.customer_id
+        where a.deleted = 0
+        and tc.deleted = 0
+        <if test="eModel != null and eModel != ''">
+            and a.e_model like concat('%' ,#{eModel,jdbcType=VARCHAR} , '%')
+        </if>
+        <if test="makeNum != null and makeNum != ''">
+            and a.make_num like concat('%' ,#{makeNum,jdbcType=VARCHAR} , '%')
+        </if>
+        <if test="hostNum != null and hostNum!= ''">
+            and ( a.host_num like concat('%' ,#{hostNum,jdbcType=VARCHAR} , '%')
+            or a.old_host_num like concat('%' ,#{hostNum,jdbcType=VARCHAR} , '%'))
+        </if>
+        <if test="cId != null and cId!= ''">
+            and a.customer_id = #{cId}
+        </if>
+        <if test="cName != null and cName!= ''">
+            and tc.c_name like #{cName}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and tc.service_engineer = #{serviceEngineer}
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword !=''">
+            and (a.e_model like #{keyword}
+            or a.make_num like #{keyword}
+            or a.host_num like #{keyword} )
+        </if>
+    </select>
+
+
+    <sql id="device_col">
+        a.e_id eId,
+	a.e_code eCode,
+	a.e_name eName,
+	a.customer_id customerId,
+	a.e_model eModel,
+	a.motor_brand motorBrand,
+	a.make_num makeNum,
+	a.elec_pan_model elecPanModel,
+	a.host_num hostNum,
+	a.motor_make_date motorMakeDate,
+	a.creator creator,
+	a.created created,
+	a.modifier modifier,
+	a.modified modified,
+	a.deleted deleted,
+	a.note note ,
+	a.debug_date debugDate,
+	a.regular_check regularCheck,
+	a.check_months checkMonths,
+	a.old_host_num oldHostNum,
+	a.make_date makeDate,
+	a.file_ids fileIds,
+	a.machinery_number machineryNumber,
+    a.motor_model motorModel
+    </sql>
+    <select id="selectDeviceListByPage" resultType="TbEquipment" parameterType="DeviceQueryParam">
+        select
+        <include refid="device_col"/>,DATE_FORMAT(motor_make_date,'%Y-%m-%d') formatDate,
+        tc.c_name cName,
+        DATE_FORMAT(a.created,'%Y-%m-%d') createdStr
+        from tb_equipment a
+        left join tb_customer tc on tc.c_id= a.customer_id
+        where a.deleted = 0
+        and tc.deleted = 0
+        <if test="eModel != null and eModel != ''">
+            and a.e_model like concat('%' ,#{eModel,jdbcType=VARCHAR} , '%')
+        </if>
+        <if test="makeNum != null and makeNum != ''">
+            and a.make_num like concat('%' ,#{makeNum,jdbcType=VARCHAR} , '%')
+        </if>
+        <if test="hostNum != null and hostNum!= ''">
+            and ( a.host_num like concat('%' ,#{hostNum,jdbcType=VARCHAR} , '%')
+            or a.old_host_num like concat('%' ,#{hostNum,jdbcType=VARCHAR} , '%'))
+        </if>
+        <if test="cId != null and cId!= ''">
+            and a.customer_id = #{cId}
+        </if>
+        <if test="cName != null and cName!= ''">
+            and tc.c_name like #{cName}
+        </if>
+        <if test="serviceEngineer != null and serviceEngineer!= ''">
+            and tc.service_engineer = #{serviceEngineer}
+        </if>
+        <if test="serviceEngineerList != null and serviceEngineerList.size() > 0 ">
+            and tc.service_engineer in
+            <foreach collection="serviceEngineerList" close=")" index="index" item="uId" open="(" separator=",">
+                #{uId}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword !=''">
+            and (a.e_model like #{keyword}
+            or a.make_num like #{keyword}
+            or a.host_num like #{keyword} or a.e_name like #{keyword} or a.e_code like #{keyword})
+        </if>
+        order by a.e_id desc
+        limit #{start} ,#{limit}
+    </select>
+
+    <select id="selectByMakeNum" parameterType="java.lang.String" resultType="TbEquipment">
+        select
+        <include refid="device_col"/>
+        from tb_equipment a
+        where a.deleted = 0
+        and a.make_num =#{makeNum,jdbcType=VARCHAR}
+    </select>
+</mapper>

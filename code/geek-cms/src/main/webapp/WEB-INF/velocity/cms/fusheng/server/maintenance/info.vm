@@ -1,0 +1,294 @@
+#set($page_title=" 维保详情")
+#set($selected_menu_id='menu_task_center_index')
+#set($layout = "blank.vm")
+
+<link href="/plug-in/geek/print.css" rel="stylesheet" type="text/css" media="print"/>
+<script src="/page/common/fileupload.js?_dc=$!{staticVersion}"></script>
+<script src="/plug-in/fusheng/server/maintenance/info.js?_dc=$!{staticVersion}"></script>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">运营服务<span style="font-size: 12px">>>
+                维保详情
+        </span></h4>
+</div>
+<input type="hidden" id="id" name="id" value="$!{maintenance.id}"/>
+<input type="hidden" class="hidden" id="cNameI" name="cNameI" value="$!{maintenance.cId}"/>
+<input type="hidden" class="hidden" id="eNameI" name="eNameI" value="$!{maintenance.eId}"/>
+<input type="hidden" class="hidden" id="fileIds" name="fileIds" value="$!{maintenance.fileIds}"/>
+
+<div class="" id="maintenance-Info">
+    <div class="print-header col-xs-12" style="font-family:'微软雅黑', '幼圆','宋体';">
+        <div class="col-xs-3 align-center" style="margin-top: 20px;font-size: 8px">
+            <div class="print-logo ">
+                <img src="/images/logo.png" style="width: 150px">
+            </div>
+            <div class="print-culture ">
+                精益求精<br>
+                为用户提供优质，安全<br>
+                可靠的产品和满意的服务
+            </div>
+        </div>
+        <div class="col-xs-9 align-center" style="font-weight:bolder">
+            <div class="print-business">
+                <h1>北京精通复盛机械有限公司</h1>
+            </div>
+            <div class="print-title">
+                <h3>维保单</h3>
+            </div>
+        </div>
+    </div>
+    <div class="print-body col-xs-12">
+        <table style="border: 1px solid #000000;width: 95%;font-size: 16px;margin-left: 20px;margin-right: 20px;margin-top: 10px;margin-bottom: 20px;table-layout：fixed">
+            <tr style="border: 1px solid #000000;">
+                <td style="width: 25%;border: 1px solid #000000;">
+                    维保单号
+                </td>
+                <td style="width: 25%;border: 1px solid #000000;word-wrap:break-word;word-break:break-all;" colspan="3">
+                    $!{maintenance.mCode}
+                </td>
+
+            </tr>
+            <tr style="">
+                <td style="width: 25%;border: 1px solid #000000;">
+                    客户代码
+                </td>
+                <td style="width: 25%;border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cCode}
+                </td>
+                <td style="width: 18%">
+                    客户名称
+                </td>
+                <td style="border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cName}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    客户电话
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cPhone}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    客户地址
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cAddress}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    联系人
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cContact}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    主机号码
+                </td>
+                <td>
+                    #if($!{maintenance.hostNum} != "")
+                        $!{maintenance.hostNum}
+                    #elseif ($!{maintenance.oldHostNum} != "")
+                        $!{maintenance.oldHostNum}
+                    #else
+                        --
+                    #end
+                </td>
+                <td style="border: 1px solid #000000;">
+                    设备型号
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.eModel}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    电机厂牌
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.motorBrand}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    制造号码
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.makeNum}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    报修内容
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.repairContent}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    故障原因
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.faultReason}
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    电机厂牌
+                </td>
+                <td>
+                    $!{maintenance.motorBrand}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    电机制造日期
+                </td>
+                <td>
+                    $!{maintenance.formatMotorMakeDate}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    齿轮速比
+                </td>
+                <td>
+                    $!{maintenance.gearSpeed}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    运转时数
+                </td>
+                <td>
+                    $!{maintenance.workTimes}
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    排气压力(MPa)
+                </td>
+                <td>
+                    $!{maintenance.exhaustPressure}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    环境温度(℃)
+                </td>
+                <td>
+                    $!{maintenance.envTemperature}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    运转电压(V)
+                </td>
+                <td>
+                    $!{maintenance.runningVoltage}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    运转电流(A)
+                </td>
+                <td>
+                    $!{maintenance.runningElec}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    排气温度(℃)
+                </td>
+                <td>
+                    $!{maintenance.exhaustTemperature}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    油压(MPa)
+                </td>
+                <td>
+                    $!{maintenance.oilPressure}
+                </td>
+            </tr>
+
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务内容
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.serviceContentDesc}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务人员建议
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.engineerSuggest}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务费用
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;">
+                    $!{maintenance.serviceFees} 元
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    用户意见
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.cView}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    备注
+                </td>
+                <td colspan="3" style="border: 1px solid #000000;;word-wrap:break-word;word-break:break-all;">
+                    $!{maintenance.note}
+                </td>
+            </tr>
+            <tr style="border: 1px solid #000000;">
+                <td style="border: 1px solid #000000;">
+                    服务工程师
+                </td>
+                <td>
+                    $!{maintenance.serviceEngineerName}
+                </td>
+                <td style="border: 1px solid #000000;">
+                    服务日期
+                </td>
+                <td>
+                    $!{maintenance.formatServiceDate}
+                </td>
+            </tr>
+        </table>
+        <br>
+        <div style="row">
+            #if($maintenance.attachmentList)
+                <h5>附件：</h5>
+                #foreach($url in $maintenance.attachmentList)
+                    <div class="row" style="margin-left: 20px">
+                        <img src="$!{url}" style="width: 95%">
+                    </div>
+                #end
+            #end
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer col-xs-12">
+    <button class="btn btn-sm btn-primary" type="button" id="print-btn" name="print-btn">
+        打印
+    </button>
+    &nbsp; &nbsp; &nbsp;
+    <button class="btn btn-white btn-info " type="button" id="closeModal">
+        关闭
+    </button>
+</div>
+
+#define($javascriptBlock)
+
+#end
