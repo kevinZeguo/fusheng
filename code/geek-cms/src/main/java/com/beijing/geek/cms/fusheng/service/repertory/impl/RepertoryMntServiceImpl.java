@@ -28,11 +28,9 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
     private PartRepertoryRecordDao partRepertoryRecordDao;
     @Autowired
     private PartRepertoryRecordOutDao partRepertoryRecordOutDao;
-    @Autowired
-    private TbPartDao tbPartDao;
-
 
     @Override
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void saveInRepertory(PartRepertoryRecord repertoryRecord, Integer userId) throws Exception {
         //保存入库记录表
         repertoryRecord.setCreator(userId);
@@ -54,7 +52,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
     }
 
     @Override
-    @Transactional("geek-cms")
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void editInRepertory(PartRepertoryRecord record, Integer userId) throws Exception {
         //保存入库记录表
         record.setModifier(userId);
@@ -65,7 +63,8 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
             //查询库存记录是否存在，如存在，则更新，若不存在则新增
             modifyPartRepertory(record.getStorageId(), billListHis.get(0).getpId(), -billListHis.get(0).getNum(), userId);
         }
-        List<PartRepertoryRecordBill> billList = record.getBillList(); //删除历史的保存新的入库单
+        //删除历史的保存新的入库单
+        List<PartRepertoryRecordBill> billList = record.getBillList();
         partRepertoryRecordBillDao.deleteByRecordId(record);
         for (PartRepertoryRecordBill bill : billList) {
             bill.setCreator(userId);
@@ -73,7 +72,6 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
             bill.setRepertoryRecordId(record.getId());
             partRepertoryRecordBillDao.insert(bill);
             modifyPartRepertory(record.getStorageId(), bill.getpId(), bill.getNum(), userId);
-
         }
     }
 
@@ -87,6 +85,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
      * @param userId
      */
     private synchronized void modifyPartRepertory(String storageId, Integer pId, Integer num, Integer userId) throws Exception {
+
         //根据仓库Id和配件Id查询是否存在库存
         PartRepertory partRepertory = partRepertoryDao.selectByRepIdAndPid(storageId, pId);
         if (partRepertory == null || partRepertory.getId() == null || partRepertory.getId() == 0) {
@@ -121,7 +120,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
 
 
     @Override
-    @Transactional("geek-cms")
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void cancelInRepertory(Integer repertoryRecordId, Integer userId) throws Exception {
         //根据入库Id查询入库详情
         PartRepertoryRecord repertoryRecord = partRepertoryRecordDao.selectById(repertoryRecordId);
@@ -140,8 +139,6 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
         repertoryRecord.setStatus(CmsDict.Repertory_status_cancel);
         repertoryRecord.setModifier(userId);
         partRepertoryRecordDao.updateStatus(repertoryRecord);
-
-
     }
 
     @Override
@@ -164,7 +161,8 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
                 //入库信息
                 if (bills != null) {
                     for (PartRepertoryRecordBill bill : bills) {
-                        if (bill.getRepertoryType() == CmsDict.Repertory_type_in.intValue()) {//入库
+                        if (bill.getRepertoryType() == CmsDict.Repertory_type_in.intValue()) {
+                            //入库
                             inNum += bill.getNum() != null ? bill.getNum() : 0;
                             inTotalPrice += (bill.getNum() != null ? bill.getNum() : 0) * (bill.getPrice() != null ? bill.getPrice() : 0);
                         } else {//出库
@@ -219,7 +217,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
     }
 
     @Override
-    @Transactional("geek-cms")
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void saveOutRepertory(PartRepertoryRecordOut repertoryRecord, Integer userId) throws Exception {
         //保存出库信息
         //保存入库记录表
@@ -255,7 +253,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
     }
 
     @Override
-    @Transactional("geek_cms")
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void editOutRepertory(PartRepertoryRecordOut record, Integer userId) throws Exception {
         //保存出库信息
         //保存入库记录表
@@ -290,6 +288,7 @@ public class RepertoryMntServiceImpl implements RepertoryMntService {
 
 
     @Override
+    @Transactional(value = "geek-cms", rollbackFor = Exception.class)
     public void cancelOutRepertory(Integer repertoryRecordId, Integer userId) throws Exception {
         //根据入库Id查询入库详情
         PartRepertoryRecord repertoryRecord = partRepertoryRecordDao.selectById(repertoryRecordId);

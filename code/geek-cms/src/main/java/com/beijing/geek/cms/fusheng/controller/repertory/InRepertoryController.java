@@ -139,7 +139,8 @@ public class InRepertoryController {
             List<PartRepertoryRecordBill> billList = new ArrayList<>();
             billList.add(bill);
             record.setBillList(billList);
-            if (record.getId() != null) {//编辑入库单
+            if (record.getId() != null) {
+                //编辑入库单
                 repertoryMntService.editInRepertory(record, user.getUserId());
             } else {//新增入库单
                 repertoryMntService.saveInRepertory(record, user.getUserId());
